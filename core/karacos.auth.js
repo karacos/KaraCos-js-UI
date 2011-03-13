@@ -125,7 +125,7 @@
 		 * @param callback
 		 * @returns
 		 */
-		this.provideLoginUI = function(callback){
+		this.provideLoginUI = function(callback, error){
 			var that = this;
 			if (this.isUserConnected()) {
 				callback();
@@ -155,31 +155,32 @@
 					}
 					that.loginWindow.find('.form_login_button').button()
 					.click(function() {
-						var data = { method: "",
-								params: {},
-								id: 1}
+						var params = {},
+							method = '';
 						$.each($(this).closest('form').serializeArray(), function(i, field) {
 							if (field.name === "method") {
-								data.method = field.value;
+								method = field.value;
 							} else {
-								data.params[field.name] = field.value;
+								params[field.name] = field.value;
 							}
 						}); // each
-						jQuery.ajax({ url: "/",
-							dataType: "json",
+						KaraCos.action({ url: "/",
+							method: method,
 							async: false,
-							contentType: 'application/json',
-							context: document.body,
-							type: "POST",
-							data: $.toJSON(data),
-							success: function(data) {
+							params: params,
+							callback: function(data) {
 								if (data.success) {
 									that.loginWindow.dialog('close');
 									if (typeof callback !== "undefined") {
 										callback();
+									} else {
+										error();
 									}
 								}
 							},
+							error: function(data) {
+								error();
+							}
 						}); // POST login form
 					});  // click
 					that.loginWindow.dialog({width: '600px', modal:true}).show();

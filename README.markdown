@@ -12,7 +12,7 @@ Initialize KaraCos :
 
 		<script>
 			conf = {};
-			KaraCos(conf)
+			new KaraCos(conf);
 		</script>
 
 The conf object content will activate modules and provide conf for each.
@@ -55,7 +55,20 @@ Process a KaraCos action, params :
 				}
 			};
 
- 
+### KaraCos.authManager.authenticationHeader(elemselector)
+
+Draws authentication menu in elemselector/
+
+### KaraCos.authManager.isUserConnected()
+
+### KaraCos.authManager.provideLoginUI(callback, error)
+params :
+* callback : function
+* error : function
+Executes callback if user is connected, else shows a login window then process callback if login successed, otherwise process error
+
+## logout()
+
 ## Upcoming stuff :
 * AJAX browsing elements
 * VIE based editable content

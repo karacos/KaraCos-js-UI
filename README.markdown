@@ -63,8 +63,10 @@ Draws authentication menu in elemselector/
 
 ### KaraCos.authManager.provideLoginUI(callback, error)
 params :
+
 * callback : function
 * error : function
+
 Executes callback if user is connected, else shows a login window then process callback if login successed, otherwise process error
 
 ## logout()

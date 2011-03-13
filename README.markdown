@@ -25,6 +25,7 @@ Process a KaraCos action, params :
  		{
 			url:'/',//required
 			method:'', //required
+			params: {},
 			async: false,
 			callback:function(data) {},
 			error: function() {}

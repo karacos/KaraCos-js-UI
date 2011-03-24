@@ -1,4 +1,5 @@
-(function(){
+(function(window, document){
+	var KaraCos = window.KaraCos;
 	/**
 	 * 
 	 * @returns
@@ -19,7 +20,7 @@
 			fblogin;
 			if (elem === undefined) {
 				// default id
-				elem = jQuery('#header_auth_button');
+				elem = KaraCos.$('#header_auth_button');
 			}
 			if (typeof elem === 'string') {
 				elem = KaraCos(elem);
@@ -32,14 +33,14 @@
 					}
 					elem.append('<p>Bienvenue '+ username +'</p>');
 					//TODO i18n
-					logout = jQuery('<button>Se déconnecter</button>');
+					logout = KaraCos('<button>Se déconnecter</button>');
 					logout.click(function(){
 						that.logout();
 					});
 					elem.append(logout);
 				} else {
-					if (that.config.facebook) {
-						fblogin = jQuery('<button>Se connecter avec facebook</button>');
+					if (typeof FB !== 'undefined') {
+						fblogin = KaraCos('<button>Se connecter avec facebook</button>');
 						fblogin.click(function(){
 							FB.login(function(response) {
 								  if (response.session) {
@@ -52,7 +53,13 @@
 						elem.append(fblogin);
 					
 				}
-				elem.append('<button>Se connecter (inscription au site)</button>');
+				login = KaraCos('<button>Se connecter (inscription au site)</button>');
+				login.click(function(){
+					that.provideLoginUI(function(){
+						that.authenticationHeader(elem);
+					});
+				});
+				elem.append(login);
 			}
 			}
 		};
@@ -63,7 +70,7 @@
 		 */
 		this.processFBCookie = function(){
 			var that = this;
-			jQuery.ajax({ url: "/_process_facebook_cookie",
+			KaraCos.$.ajax({ url: "/_process_facebook_cookie",
 				context: document.body,
 				type: "GET",
 				async: true,
@@ -94,10 +101,10 @@
 							}
 						});
 					} else {
-						return this.userConnected = false;
+						return this.userConnected;
 					}
 				} else { // user known in karacos
-					return this.userConnected = true;
+					this.userConnected = true;
 				}
 			}
 			return this.userConnected;
@@ -114,12 +121,23 @@
 				callback: function(){
 					if (typeof FB !== 'undefined') {
 						FB.logout();
+					} else {
+						that.userConnected = false;
+						that.authenticationHeader();
 					}
-					that.userConnected = false;
 				}
 			});
 		};
 		
+		/**
+		 * 
+		 */
+		this.login = function(useractionsforms){
+			that.userConnected = true;
+			that.user_actions_forms = useractionsforms;
+			that.authenticationHeader();
+			
+		};
 		/**
 		 * 
 		 * @param callback
@@ -133,7 +151,7 @@
 			}
 			this.loginWindow = $('#login_form_window');
 			if (this.loginWindow.length === 0) {
-				jQuery('body').append('<div id="login_form_window"/>');
+				KaraCos.$('body').append('<div id="login_form_window"/>');
 				this.loginWindow = $('#login_form_window');
 			} // sa.length
 			KaraCos.getForm({
@@ -151,12 +169,13 @@
 							FB.XFBML.parse(elem);
 						});
 					} else {
-						$('.kc_fb_box').empty();
+						$('.kc_fb_title').remove();
+						$('.kc_fb_box').remove();
 					}
 					that.loginWindow.find('.form_login_button').button()
 					.click(function() {
 						var params = {},
-							method = '';
+							method = 'login';
 						$.each($(this).closest('form').serializeArray(), function(i, field) {
 							if (field.name === "method") {
 								method = field.value;
@@ -170,6 +189,7 @@
 							params: params,
 							callback: function(data) {
 								if (data.success) {
+									that.login(data.data);
 									that.loginWindow.dialog('close');
 									if (typeof callback !== "undefined") {
 										callback();
@@ -179,6 +199,7 @@
 								}
 							},
 							error: function(data) {
+								that.userConnected = false;
 								error();
 							}
 						}); // POST login form
@@ -200,44 +221,55 @@
 			}
 		});
 		if (this.config.facebook) {
-			jQuery.getScript('http://connect.facebook.net/en_US/all.js', function() { 
-				FB.init(that.config.facebook);
-				/* Below are facebook events
-				 * Facebook events :
-				 * auth.login -- fired when the user logs in
-				 * auth.logout -- fired when the user logs out
-				 * auth.sessionChange -- fired when the session changes
-				 * auth.statusChange -- fired when the status changes
-				 * xfbml.render -- fired when a call to FB.XFBML.parse() completes
-				 * edge.create -- fired when the user likes something (fb:like)
-				 * edge.remove -- fired when the user unlikes something (fb:like)
-				 * comment.create -- fired when the user adds a comment (fb:comments)
-				 * comment.remove -- fired when the user removes a comment (fb:comments)
-				 * fb.log -- fired on log message
-				 */
-				FB.Event.subscribe('auth.login', function(response) {
-					that.userConnected = true;
-					that.processFBCookie();
-					that.authenticationHeader();
-				});
-				FB.Event.subscribe('auth.logout', function(response) {
-					that.userConnected = false;
-					that.authenticationHeader();
-				});
-				FB.getLoginStatus(function(response) {
-					if (response.session) { // logged in and connected user, someone you know
-						// process login to karacos with fb id
-						that.processFBCookie();
-						that.userConnected = true;
-					} else { // Not connected in KaraCos nor in facebook
-						that.userConnected = false;
+			try {
+				KaraCos.$.ajax({
+					url:'http://connect.facebook.net/en_US/all.js',
+					async: true,
+					dataType: 'script',
+					success: function() { 
+						FB.init(that.config.facebook);
+						/* Below are facebook events
+						 * Facebook events :
+						 * auth.login -- fired when the user logs in
+						 * auth.logout -- fired when the user logs out
+						 * auth.sessionChange -- fired when the session changes
+						 * auth.statusChange -- fired when the status changes
+						 * xfbml.render -- fired when a call to FB.XFBML.parse() completes
+						 * edge.create -- fired when the user likes something (fb:like)
+						 * edge.remove -- fired when the user unlikes something (fb:like)
+						 * comment.create -- fired when the user adds a comment (fb:comments)
+						 * comment.remove -- fired when the user removes a comment (fb:comments)
+						 * fb.log -- fired on log message
+						 */
+						FB.Event.subscribe('auth.login', function(response) {
+							that.userConnected = true;
+							that.processFBCookie();
+							that.authenticationHeader();
+						});
+						FB.Event.subscribe('auth.logout', function(response) {
+							that.userConnected = false;
+							that.authenticationHeader();
+						});
+						FB.getLoginStatus(function(response) {
+							if (response.session) { // logged in and connected user, someone you know
+								// process login to karacos with fb id
+								that.processFBCookie();
+								that.userConnected = true;
+							} // done
+						});
+						that.authenticationHeader();
+					},
+					failure: function() {
+						alert('Error while loading facebook');
 					}
-				});
-				that.authenticationHeader();
-			}); // get script facebook
+				}); // get script facebook
+				
+			} catch (e) {
+				console.log('Facebook loading failure');
+			}
 		}
 	}; // function authManager
 	KaraCos(function(){
 		KaraCos.authManager = new authManager(KaraCos.config.auth);
 	});
-})();
+})(window, document);

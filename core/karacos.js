@@ -1,7 +1,76 @@
-(function(){
-	
+(function(window, document){
+	"use strict";
+	//Dependencies 
+	if (Backbone === 'undefined') {
+		jQuery.ajax({
+			url:'http://github.com/karacos/KaraCos-UI-js/raw/deps/Backbone.js',
+			async: false,
+			dataType: 'script',
+			success: function() { 
+				
+			}
+		});
+	}
+	if (VIE === 'undefined') {
+		jQuery.ajax({
+			url:'http://github.com/karacos/KaraCos-UI-js/raw/deps/VIE.js',
+			async: false,
+			dataType: 'script',
+			success: function() { 
+				
+			}
+		});
+	}
+	// Sync with backend
+	Backbone.sync = function(method, model) {
+		//if(model.hasChanged()) {
+			console.log(method, JSON.stringify(model));
+			var url = model.get('url'),
+				dataObject = model.toJSON(),
+				method = '_update',
+				result = false,
+				idparts;
+			delete dataObject.id;
+			delete dataObject.url;
+			
+			if (model.type === "karacos:method") {
+				idparts = model.id.split(":");
+				method = idparts[3];
+				//dataObject.id = idparts[2]; 
+			} else {
+				if (model.type.split(":")[0] === "karacos") {
+					for (var property in that.pagedata) {
+						if (!(property in dataObject)) {
+							dataObject[property] = that.pagedata[property];
+						}
+					}
+				}
+			}
+			$.ajax({ url: url,
+				dataType: "json",
+				contentType: 'application/json',
+				data: $.toJSON({
+					'method' : method,
+					'id' : 1,
+					'params' : dataObject //that.pagedata
+				}),
+				context: document.body,
+				type: "POST",
+				success: function(data) {
+					if (data.success) {
+						return true;
+					} else {
+						return false;
+					}
+				},
+				failure: function() {
+					return false;
+				}});
+			return result;
+		//}
+	};
 	function karacosConstructor() {
-		var that = {};
+		var that = {'$': jQuery};
 		/**
 		 * Process a KaraCos action
 		 * @param url
@@ -16,7 +85,7 @@
 					params: object.params || {},
 					id: 1},
 					async = (object.async === undefined) ? true : object.async;
-			jQuery.ajax({ url: object.url,
+			that.$.ajax({ url: object.url,
 				dataType: "json",
 				async: async,
 				contentType: 'application/json',
@@ -46,7 +115,7 @@
 					acturl = (url.substring(url.length - 1) == "/" ? url : (url +"/")) +
 					object.form;
 			
-			jQuery.ajax({ url: acturl,
+			that.$.ajax({ url: acturl,
 				dataType: "json",
 				async: true,
 				contentType: 'application/json',
@@ -63,7 +132,9 @@
 									object.callback(data,form);
 								}
 							},
+							// TODO: Tests around parameters
 							failure: function(p1,p2,p3) {
+								params;
 								object.error();
 							}
 						});
@@ -99,17 +170,26 @@
 				if (karacos.config !== undefined) {
 					throw Error("KaraCos object already initialized")
 				}
-				jQuery.extend(true,karacos,that);
+				that.$.extend(true,karacos,that);
 				karacos.config = param;
-				jQuery.each(karacos.initMethods, function(i,m) {m();});
+				len = karacos.initMethods.length;
+				KaraCos = karacos;
+				for (var i = 0; i < len ; i++) {
+					karacos.initMethods[i]();
+				}
 				return karacos;
 			}
 			if (typeof param === 'string') {
 				//do special stuff ? else process as jQuery selector
-				return jQuery(param);
+				return that.$(param);
 			}
 		}
 		return karacos;
+	}; // karacosConstructor
+	
+	KaraCos = karacosConstructor();
+	
+	window.onerror = function (msg, url, linenumber) {
+		return true;
 	};
-	this.KaraCos = karacosConstructor();
-})();
+})(window, document);

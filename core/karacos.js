@@ -69,6 +69,16 @@
 			return result;
 		//}
 	};
+	
+	VIE.ContainerManager.findAdditionalInstanceProperties = function(element, modelInstance){
+		if (element.attr("lang") != "") {
+			modelInstance.set({lang: element.attr("lang")});
+		}
+		if (element.attr("url") != "") {
+			modelInstance.set({url: element.attr("url")});
+		}
+	}
+	
 	function karacosConstructor() {
 		var that = {'$': jQuery};
 		/**

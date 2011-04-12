@@ -37,15 +37,16 @@
 				idparts = model.id.split(":");
 				method = idparts[3];
 				//dataObject.id = idparts[2]; 
-			} else {
-				if (model.type.split(":")[0] === "karacos") {
-					for (var property in that.pagedata) {
-						if (!(property in dataObject)) {
-							dataObject[property] = that.pagedata[property];
-						}
-					}
-				}
-			}
+			} 
+//			else {
+//				if (model.type.split(":")[0] === "karacos") {
+//					for (var property in that.pagedata) {
+//						if (!(property in dataObject)) {
+//							dataObject[property] = that.pagedata[property];
+//						}
+//					}
+//				}
+//			}
 			$.ajax({ url: url,
 				dataType: "json",
 				contentType: 'application/json',
@@ -169,15 +170,21 @@
 				if (that.initMethods === undefined) {
 					that.initMethods = [];
 				}
-				if (that.config === undefined) {
+				if (typeof that.config === "undefined") {
 					that.initMethods.push(param);
 				} else {
-					param();
+					console.log('immediate run of method');
+					console.log(param);
+					try {
+						param();
+					} catch (e) {
+						console.log(e);
+					}
 				}
 				return;
 			} 
 			if (typeof param === 'object') {
-				if (karacos.config !== undefined) {
+				if (typeof karacos.config !== "undefined") {
 					throw Error("KaraCos object already initialized")
 				}
 				that.$.extend(true,karacos,that);
@@ -185,7 +192,13 @@
 				len = karacos.initMethods.length;
 				KaraCos = karacos;
 				for (var i = 0; i < len ; i++) {
-					karacos.initMethods[i]();
+					try{
+						console.log("running func " + i);
+						console.log(karacos.initMethods[i]);
+						karacos.initMethods[i]();
+					} catch (e) {
+						console.log(e);
+					}
 				}
 				return karacos;
 			}

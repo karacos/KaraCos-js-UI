@@ -23,54 +23,39 @@
 	}
 	// Sync with backend
 	Backbone.sync = function(method, model) {
-		//if(model.hasChanged()) {
-			console.log(method, JSON.stringify(model));
-			var url = model.get('url'),
-				dataObject = model.toJSON(),
-				method = '_update',
-				result = false,
-				idparts;
-			delete dataObject.id;
-			delete dataObject.url;
-			
-			if (model.type === "karacos:method") {
-				idparts = model.id.split(":");
-				method = idparts[3];
-				//dataObject.id = idparts[2]; 
-			} 
-//			else {
-//				if (model.type.split(":")[0] === "karacos") {
-//					for (var property in that.pagedata) {
-//						if (!(property in dataObject)) {
-//							dataObject[property] = that.pagedata[property];
-//						}
-//					}
-//				}
-//			}
-			$.ajax({ url: url,
-				dataType: "json",
-				contentType: 'application/json',
-				data: $.toJSON({
-					'method' : method,
-					'id' : 1,
-					'params' : dataObject //that.pagedata
-				}),
-				context: document.body,
-				type: "POST",
-				success: function(data) {
-					if (data.success) {
-						return true;
-					} else {
-						return false;
-					}
-				},
-				failure: function() {
-					return false;
-				}});
-			return result;
-		//}
+		console.log(method, JSON.stringify(model));
+		var url = model.get('url'),
+			dataObject = model.toJSON(),
+			method = '_update',
+			result = false,
+			idparts;
+		delete dataObject.id;
+		delete dataObject.url;
+		
+		if (model.type === "karacos:method") {
+			idparts = model.id.split(":");
+			method = idparts[3];
+		} 
+		$.ajax({ url: url,
+			dataType: "json",
+			contentType: 'application/json',
+			async: false,
+			data: $.toJSON({
+				'method' : method,
+				'id' : 1,
+				'params' : dataObject //that.pagedata
+			}),
+			context: document.body,
+			type: "POST",
+			success: function(data) {
+				result = data;
+			},
+			failure: function() {
+				result = false;
+			}});
+		return result;
 	};
-	
+
 	VIE.ContainerManager.findAdditionalInstanceProperties = function(element, modelInstance){
 		if (element.attr("lang") != "") {
 			modelInstance.set({lang: element.attr("lang")});
@@ -81,87 +66,113 @@
 	}
 	
 	function karacosConstructor() {
-		var that = {'$': jQuery};
-		/**
-		 * Process a KaraCos action
-		 * @param url
-		 * @param method
-		 * @param params
-		 * @param callback
-		 * @param error
-		 */
-		
-		that.action = function(object) {
-			var data = { method: object.method,
-					params: object.params || {},
-					id: 1},
-					async = (object.async === undefined) ? true : object.async;
-			that.$.ajax({ url: object.url,
-				dataType: "json",
-				async: async,
-				contentType: 'application/json',
-				context: document.body,
-				type: "POST",
-				data: $.toJSON(data),
-				success: function(result) {
-					if (result.success) {
-						if (typeof object.callback !== "undefined") {
-							object.callback(result);
-						}
-					} else {
-						if (typeof object.error !== "undefined") {
-							object.error(result);
-						}
-					}
-				},
-				failure: function() {
-					if (typeof object.error !== "undefined") {
-						object.error();
-					}
-				}
-			}); // POST
-		};
-		that.getForm = function(object) {
-			var url = (object.url === undefined || object.url === "") ? "/" : object.url,
-					acturl = (url.substring(url.length - 1) == "/" ? url : (url +"/")) +
-					object.form;
-			
-			that.$.ajax({ url: acturl,
-				dataType: "json",
-				async: true,
-				contentType: 'application/json',
-				context: document.body,
-				type: "GET",
-				success: function(data) {
-					if (data.success) {
-						$.ajax({ url: "/fragment/" + object.form +".jst",
-							context: document.body,
-							type: "GET",
-							async: false,
-							success: function(form) {
+		var that = {'$': jQuery,
+				/**
+				 *Options for jsontemplate
+				 */
+				'jst_options': {
+					'more_formatters': {}
+		        },
+		        /**
+				 * Process a KaraCos action
+				 * @param url
+				 * @param method
+				 * @param params
+				 * @param callback
+				 * @param error
+				 */
+				'action': function(object) {
+					var data = { method: object.method,
+							params: object.params || {},
+							id: 1},
+							async = (object.async === undefined) ? true : object.async;
+					that.$.ajax({ url: object.url,
+						dataType: "json",
+						async: async,
+						contentType: 'application/json',
+						context: document.body,
+						type: "POST",
+						data: $.toJSON(data),
+						success: function(result) {
+							if (result.success) {
 								if (typeof object.callback !== "undefined") {
-									object.callback(data,form);
+									object.callback(result);
 								}
-							},
-							// TODO: Tests around parameters
-							failure: function(p1,p2,p3) {
-								params;
+							} else {
+								if (typeof object.error !== "undefined") {
+									object.error(result);
+								}
+							}
+						},
+						failure: function() {
+							if (typeof object.error !== "undefined") {
 								object.error();
 							}
-						});
-					} else {
-						if (typeof error !== "undefined") {
-							object.error(data);
 						}
-					}
+					}); // POST
 				},
-				failure: function() {
-					if (typeof object.error !== "undefined") {
-						object.error();
+				'getForm': function(object) {
+					var url = (object.url === undefined || object.url === "") ? "/" : object.url,
+							acturl = (url.substring(url.length - 1) == "/" ? url : (url +"/")) +
+							object.form;
+					
+					that.$.ajax({ url: acturl,
+						dataType: "json",
+						async: true,
+						contentType: 'application/json',
+						context: document.body,
+						type: "GET",
+						success: function(data) {
+							if (data.success) {
+								$.ajax({ url: "/fragment/" + object.form +".jst",
+									context: document.body,
+									type: "GET",
+									async: false,
+									success: function(form) {
+										if (typeof object.callback !== "undefined") {
+											object.callback(data,form);
+										}
+									},
+									// TODO: Tests around parameters
+									failure: function(p1,p2,p3) {
+										params;
+										object.error();
+									}
+								});
+							} else {
+								if (typeof error !== "undefined") {
+									object.error(data);
+								}
+							}
+						},
+						failure: function() {
+							if (typeof object.error !== "undefined") {
+								object.error();
+							}
+						}
+					}); // GET
+				},
+				'button': function(elems, callback) {
+					var len = elems.length,
+						elem;
+					while (--len >= 0) {
+						elem = KaraCos.$(elems.get(len));
+						elem.click(function(event){
+							var model = VIE.ContainerManager.getInstanceForContainer(elem),
+								result;
+							event.stopImmediatePropagation();
+							event.preventDefault();
+							result = Backbone.sync('process',model);
+							if (typeof callback !== "undefined") {
+								callback(result);
+							}
+						});
+						
 					}
+					return elems;
 				}
-			}); // GET
 		};
+
 		function karacos(param) {
 			if (typeof param === 'undefined') {
 				return that;

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/_browser/css/reset.css" media="screen" />
+<script type="text/javascript" src="/_browser/karacos-ui/deps/jquery-1.5.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/_browser/karacos-ui/css/fg.menu.css" media="screen" />
+<link rel="stylesheet" href="/_browser/jquery-ui/themes/base/jquery.ui.all.css">
+<link rel="stylesheet" type="text/css" href="/_browser/karacos-ui/css/jquery.ui.potato.menu.css" media="screen" />
+<script type="text/javascript" src="/_browser/karacos-ui/deps/jquery.json-2.2.min.js"></script>
+<script type="text/javascript" src="/_browser/js/VIE/underscore-min.js"></script>
+<script type="text/javascript" src="/_browser/js/VIE/backbone-min.js"></script>
+<script type="text/javascript" src="/_browser/js/VIE/vie.js"></script>
+<script type="text/javascript" src="/_browser/js/VIE/vie-containermanager.js"></script>
+<script type="text/javascript" src="/_browser/js/VIE/vie-collectionmanager.js"></script>
+<script type="text/javascript" src="/_browser/js/VIE/vie-aloha.js"></script>
+<script type="text/javascript" src="/_browser/karacos-ui/deps/jquery-ui-1.8.11.custom.min.js"></script>
+<script type="text/javascript" src="/_browser/karacos-ui/deps/json-template.js"></script>
+<script type="text/javascript" src="/_browser/karacos-ui/deps/ui.menu.js"></script>
+<script type="text/javascript" src="/_browser/karacos-ui/deps/ui.panel.js"></script>
+<script type="text/javascript" src="/_browser/karacos-ui/deps/ui.toolbar.js"></script>
+<script type="text/javascript" src="/_browser/karacos-ui/deps/ui.menu.js"></script>
+<script type="text/javascript" src="/_browser/karacos-ui/core/karacos.js"></script>
+<script type="text/javascript" src="/_browser/karacos-ui/core/karacos.auth.js"></script>
+<script language="javascript">
+jQuery(function(){
+	jQuery('#karacos_actions_toolbar .button').button();
+	var menu = jQuery('#karacos_actions_toolbar ul').menu();
+	jQuery(".menu_holder").hide();
+	 jQuery('#kc_node_menu_button').click(function(event){
+		 
+		 jQuery(".menu_holder").css('position','absolute');
+		 jQuery(".menu_holder").css('left',jQuery('#kc_node_menu_button').offset().left);
+		 jQuery(".menu_holder").animate({"height": "toggle"});
+	}); 
+});
+</script>
+</head>
+<body>
+<div id="wrap"> 
+            <header> 
+                <div class="inside"> 
+                    <p class="header"> 
+        	
+        	My semantically anotated editable title</p> 
+                    <nav> 
+                    </nav> 
+                </div> 
+                <div class="inside" id="header_auth_button">
+                <span id="karacos_actions_toolbar" class="ui-widget-header ui-corner-bl ui-corner-br" style="padding: 10px 4px;">
+<span>Bienvenue admin@opimmo</span>
+<span class="button">Se déconnecter</span>
+<span class="button">Domain menu</span>
+<span ><span id="kc_node_menu_button" class="button">MDomain menu</span>
+<div class="menu_holder">
+<ul>
+<li><a href="#">item1</a></li>
+</ul>
+</div>
+</span>
+</span>
+                </div> <!-- placeholder four authentication menu --> 
+            </header> 
+
+<article class="inside" lang="en-US" typeof="karacos:MDomain" about="urn:uuid:75c223e7ed53418ab9ceaf569f5b6469"> 
+		<div style="display:none" property="url">/_self/</div> 
+		<h1 class="kc_property inside" property="title"> 
+        	
+        	My semantically anotated editable title</h1> 
+        <div class="kc_property inside" property="content"> 
+        
+        <div class="ui-wrapper Aloha_Image_Resize" style="overflow-x: hidden; overflow-y: hidden; position: relative; margin-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; top: 0px; left: 0px; width: 298px; height: 230px; " contenteditable="false"><div class="ui-wrapper Aloha_Image_Resize" style="overflow-x: hidden; overflow-y: hidden; position: static; width: 455px; height: 382px; top: auto; left: auto; margin-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; " contenteditable="false"><img title="" src="http://opimmo:61080/_self/content/_att/MontageSelena20101223-web.jpg" style="padding-top: 1px; padding-right: 1px; padding-bottom: 1px; padding-left: 1px; zoom: 1; display: block; background-color: highlight; position: static; width: 469px; height: 396px; top: auto; left: auto; resize: none; " class="" _moz_resizing="false" contenteditable="false"><div class="ui-resizable-handle ui-resizable-e"></div><div class="ui-resizable-handle ui-resizable-s"></div><div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style="z-index: 1001; "></div></div></div><h2>My <del>semantically</del> anot<span class="Apple-style-span" style="color: rgb(80, 80, 80); font-family: 'trebuchet ms', arial, sans-serif; font-size: 17px; "><b>ated conte</b>nt, this is just grecat</span></h2><p>Et si je rajoute maintenant que je suis connecté</p><p><span class="Apple-style-span" style="color: rgb(80, 80, 80); font-family: 'trebuchet ms', arial, sans-serif; font-size: 17px; "></span></p><img src="/_browser/aloha-nka-fork/WebContent/plugins/com.gentics.aloha.plugins.Image/images/blank.jpeg" title="" class="" _moz_resizing="false" contenteditable="false" style="zoom: 1; display: block; position: relative; width: 274px; height: 242px; top: 0px; left: 0px; resize: none; ">s is just great
+        
+        </div> 
+</article> 
+ 
+	    <aside> 
+                <div class="inside"> 
+                </div> 
+            </aside> 
+        </div> 
+        <footer> 
+            <div class="inside"> 
+            </div> 
+        </footer> 
+</body> 
+ 
+</html> 
+</body>
+</html>

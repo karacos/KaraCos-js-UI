@@ -1,0 +1,3 @@
+[submodule "deps/history"]
+	path = deps/history
+	url = https://github.com/karacos/history.js

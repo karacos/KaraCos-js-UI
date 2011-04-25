@@ -55,7 +55,6 @@
 			}});
 		return result;
 	};
-
 	VIE.ContainerManager.findAdditionalInstanceProperties = function(element, modelInstance){
 		if (element.attr("lang") != "") {
 			modelInstance.set({lang: element.attr("lang")});
@@ -64,15 +63,107 @@
 			modelInstance.set({url: element.attr("url")});
 		}
 	}
-	
+
+    // Prepare
+    var History = window.History; // Note: We are using a capital H instead of a lower h
+    if ( !History.enabled ) {
+         // History.js is disabled for this browser.
+         // This is because we can optionally choose to support HTML4 browsers or not.
+        return false;
+    }
+
+    // Bind to StateChange Event
+    History.Adapter.bind(window,'statechange',function(){ // Note: We are using statechange instead of popstate
+        var State = History.getState(); // Note: We are using History.getState() instead of event.state
+        History.log(State.data, State.title, State.url);
+        KaraCos.$.ajax({
+			url: State.url,
+			headers: {'karacos-fragment': 'true'},
+			success: function(data) {
+				KaraCos(KaraCos.config.main_content).empty().append(data);
+			}
+		});
+    });
+
 	function karacosConstructor() {
-		var that = {'$': jQuery,
+		var that = {'$': window.jQuery,
 				/**
 				 *Options for jsontemplate
 				 */
 				'jst_options': {
 					'more_formatters': {}
 		        },
+		        'activate_aloha': function() {
+					var 
+					includes = [],
+						url;
+					
+					if (typeof window.alohaQuery === "undefined") {
+						this.$('head').append('<link href="/_browser/aloha/src/aloha.css" id="aloha-style-include" rel="stylesheet">')
+						window.alohaQuery = this.$;
+				
+						//Ensure Namespace
+						window.GENTICS = window.GENTICS || {};
+						window.GENTICS.Utils = window.GENTICS.Utils || {};
+						window.GENTICS.Aloha = window.GENTICS.Aloha || {};
+						window.GENTICS.Aloha.settings = window.GENTICS.Aloha.settings || {};
+						window.GENTICS.Aloha.ui = window.GENTICS.Aloha.ui || {};
+						window.Aloha_loaded_plugins = window.Aloha_loaded_plugins || [];
+						window.GENTICS_Aloha_pluginDir = window.GENTICS_Aloha_pluginDir || false;
+						window.GENTICS_Aloha_base = window.GENTICS_Aloha_base || false;
+						
+						window.GENTICS_Aloha_base = '/_browser/aloha/src/';
+						window.Aloha_loaded_plugins = window.Aloha_loaded_plugins||[];
+						window.Aloha_loaded_plugins['format'] = true;
+						window.Aloha_loaded_plugins['link'] = true;
+						window.Aloha_loaded_plugins['linkchecker'] = true;
+						window.Aloha_loaded_plugins['table'] = true;
+						includes.push('util/base.js');
+						includes.push('dep/ext-3.2.1/adapter/jquery/ext-jquery-adapter.js');
+						includes.push('dep/ext-3.2.1/ext-all.js');
+						includes.push('dep/jquery.getUrlParam.js');
+						includes.push('dep/jquery.store.js');
+						includes.push('core/jquery.js');
+						includes.push('util/lang.js');
+						includes.push('util/range.js');
+						includes.push('util/position.js');
+						includes.push('util/dom.js');
+						includes.push('core/ext-alohaproxy.js');
+						includes.push('core/ext-alohareader.js');
+						includes.push('core/ext-alohatreeloader.js');
+						includes.push('core/core.js');
+						includes.push('core/ui.js');
+						includes.push('core/ui-attributefield.js');
+						includes.push('core/ui-browser.js');
+						includes.push('core/editable.js');
+						includes.push('core/event.js');
+						includes.push('core/floatingmenu.js');
+						includes.push('core/ierange-m2.js');
+						includes.push('core/log.js');
+						includes.push('core/markup.js');
+						includes.push('core/message.js');
+						includes.push('core/plugin.js');
+						includes.push('core/selection.js');
+						includes.push('core/sidebar.js');
+						includes.push('core/repositorymanager.js');
+						includes.push('core/repository.js');
+						includes.push('core/repositoryobjects.js');
+						includes.push('plugin/format/src/format.js');
+						includes.push('plugin/link/src/link.js');
+						includes.push('plugin/linkchecker/src/linkchecker.js');
+						includes.push('plugin/table/src/table.js');
+						for (var i=0,n=includes.length; i<n; ++i ) {
+							value = includes[i];
+							url = window.GENTICS_Aloha_base + '/' + value;
+							window.jQuery.ajax({
+								dataType : 'script',
+								async: false,
+								url: url,
+							});		
+							
+						}
+					}
+				},
 		        /**
 				 * Process a KaraCos action
 				 * @param url

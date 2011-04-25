@@ -18,6 +18,7 @@
 			logout,
 			login,
 			fblogin;
+			
 			if (elem === undefined) {
 				// default id
 				elem = KaraCos.$('#header_auth_button');
@@ -25,23 +26,28 @@
 			if (typeof elem === 'string') {
 				elem = KaraCos(elem);
 			}
-			if (elem.length !== 0) { // if not none
-				elem.empty();
+			that.menucontainer = KaraCos('<span id="karacos_actions_toolbar" class="ui-widget-header ui-corner-bl ui-corner-br" style="padding: 10px 4px;"></span>');
+			elem.empty().append(that.menucontainer);
+			if (that.menucontainer.length !== 0) { // if not none
+				that.menucontainer.empty();
 				if (isconnected) {
 					if (this.user_actions_forms.fullname) {
 						username = this.user_actions_forms.fullname;
 					}
-					elem.append('<p>Bienvenue '+ username +'</p>');
-					//TODO i18n
-					logout = KaraCos('<button>Se déconnecter</button>');
-					logout.click(function(){
-						that.logout();
+					KaraCos.$.ajax({ url: '/fragment/actions_menu.html?instance_id=' +
+							KaraCos.config.page_id + "&base_id=" + KaraCos.config.page_base_id,
+						async: true,
+						context: document.body,
+						type: "GET",
+						success: function(data) {
+							that.menucontainer.empty().append(data);
+						}
 					});
-					elem.append(logout);
+					
 				} else {
 					if (typeof FB !== 'undefined') {
 						fblogin = KaraCos('<button>Se connecter avec facebook</button>');
-						fblogin.click(function(){
+						fblogin.button().click(function(){
 							FB.login(function(response) {
 								  if (response.session) {
 								    // user successfully logged in
@@ -50,16 +56,16 @@
 								  }
 								});
 							}, {perms:'email'});
-						elem.append(fblogin);
+						that.menucontainer.append(fblogin);
 					
 				}
 				login = KaraCos('<button>Se connecter (inscription au site)</button>');
-				login.click(function(){
+				login.button().click(function(){
 					that.provideLoginUI(function(){
 						that.authenticationHeader(elem);
 					});
 				});
-				elem.append(login);
+				that.menucontainer.append(login);
 			}
 			}
 		};
@@ -114,17 +120,16 @@
 		 * 
 		 */
 		this.logout = function(){
-			var that = this;
+			var auth = this;
 			KaraCos.action({url:"/",
 				method:"logout", 
 				params:{},
 				callback: function(){
 					if (typeof FB !== 'undefined') {
 						FB.logout();
-					} else {
-						that.userConnected = false;
-						that.authenticationHeader();
 					}
+					auth.userConnected = false;
+					auth.authenticationHeader();
 				}
 			});
 		};
@@ -133,9 +138,17 @@
 		 * 
 		 */
 		this.login = function(useractionsforms){
-			that.userConnected = true;
-			that.user_actions_forms = useractionsforms;
-			that.authenticationHeader();
+			var auth = this;
+			auth.userConnected = true;
+			auth.user_actions_forms = useractionsforms;
+			KaraCos.$.ajax({
+				url: History.getState().url,
+				headers: {'karacos-fragment': 'true'},
+				success: function(data) {
+					KaraCos(KaraCos.config.main_content).empty().append(data);
+				}
+			});
+			auth.authenticationHeader();
 			
 		};
 		/**
@@ -159,7 +172,7 @@
 				form: "login",
 				callback: function(data, form) {
 					
-					var login_form_template = jsontemplate.Template(form);
+					var login_form_template = jsontemplate.Template(form, KaraCos.jst_options);
 					that.loginWindow.empty().append(login_form_template.expand(data));
 					$('#karacos_login_accordion').accordion({
 						autoHeight: false,
@@ -268,6 +281,7 @@
 				console.log('Facebook loading failure');
 			}
 		}
+		that.authenticationHeader();
 	}; // function authManager
 	KaraCos(function(){
 		KaraCos.authManager = new authManager(KaraCos.config.auth);

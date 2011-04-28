@@ -261,6 +261,37 @@
 						
 					}
 					return elems;
+				},
+				'alert': function(message, buttons) {
+					var button;
+					if (typeof KaraCos.alert_box === "undefined") {
+						KaraCos.alert_box = KaraCos('#kc_alert_box');
+						if (KaraCos.alert_box.length === 0) {
+							KaraCos('body').append('<div id="kc_alert_box"/>');
+							KaraCos.alert_box = KaraCos("#kc_alert_box");
+						} //kc_alert_box
+					} // now my alert_box elem exists
+					// So append the message here :
+					KaraCos.alert_box.empty().append(message);
+					if (typeof buttons !== "undefined") {
+						//append buttons container
+						KaraCos.alert_box.append('<div class="kc_alert_btn_container"/>');
+						KaraCos.$.each(buttons, function(index,button){
+							//append each button
+							KaraCos.alert_box.children(":last")
+								.append('<button>'+button.label+'</button>')
+								.children(":last").button().click(
+									function(event){
+										var $button = KaraCos.$(this);
+										if (typeof button.callback !== "undefined") {
+											button.callback();
+										}
+										KaraCos.alert_box.dialog('close');
+									});
+						});
+					}
+					KaraCos.alert_box.dialog({width: '400px', modal:true});
+					KaraCos.alert_box.dialog('show');
 				}
 		};
 

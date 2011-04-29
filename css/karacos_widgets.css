@@ -4,6 +4,9 @@
 #karacos_actions_menu > li {
 	float: left;
 	}
+#karacos_actions_toolbar  ul{
+	z-index: 500;
+	}
 #karacos_actions_toolbar li {
 	min-width: 100px;
 	}

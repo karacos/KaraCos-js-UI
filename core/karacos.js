@@ -296,6 +296,7 @@
 		};
 
 		function karacos(param) {
+			var len;
 			if (typeof param === 'undefined') {
 				return that;
 			}
@@ -343,7 +344,7 @@
 		return karacos;
 	}; // karacosConstructor
 	
-	KaraCos = karacosConstructor();
+	window.KaraCos = karacosConstructor();
 	
 	window.onerror = function (msg, url, linenumber) {
 		return true;

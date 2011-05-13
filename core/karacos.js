@@ -24,7 +24,9 @@
 	}
 	// Sync with backend
 	Backbone.sync = function(method, model) {
-		console.log(method, JSON.stringify(model));
+		if (window.console && console.log) {
+			console.log(method, JSON.stringify(model));
+		}
 		var url = model.get('url'),
 			dataObject = model.toJSON(),
 			method = '_update',
@@ -95,14 +97,37 @@
 					'more_formatters': {}
 		        },
 		        'activate_aloha': function() {
-					var 
-						includes = [],
-						url, value;
-					
+		        	var
+		    		includes = [],
+		    		$body = $('body'),
+		    		counter = 0,
+		    		scriptEl,
+		    		appendEl = document.head;
+		    	function loadJsFileAtIncludesCounter() {
+		    		scriptEl = document.createElement('script');
+		    		scriptEl.src = window.GENTICS_Aloha_base + '/' + includes[counter++];
+		    		scriptEl.setAttribute('defer','defer'); 
+		    		scriptEl.onload = function(event) {
+		    			$body.trigger('alohaLoadJs',{'file':includes[counter],'ref': counter});
+		    		};
+		    		appendEl.appendChild(scriptEl);
+		    	}
+
 					if (typeof window.alohaQuery === "undefined") {
 						this.$('head').append('<link href="/_browser/aloha/src/aloha.css" id="aloha-style-include" rel="stylesheet">')
 						window.alohaQuery = this.$;
 //				
+						// Define recursive event handler
+						$body.bind('alohaLoadJs', function(event, data){
+							if (includes.length > counter) {
+								loadJsFileAtIncludesCounter();
+							}else {
+								//Last file loaded
+								var $body = $('body');
+								$body.createPromiseEvent('aloha');
+								window.Aloha.init();
+							}
+						});
 //						//Ensure Namespace
 						window.GENTICS = window.GENTICS || {};
 						window.GENTICS.Utils = window.GENTICS.Utils || {};
@@ -141,7 +166,7 @@
 						includes.push('util/lang.js');
 						includes.push('util/range.js');
 						includes.push('util/position.js');
-						includes.push('core/jquery.js');
+						includes.push('core/jquery.aloha.js');
 						includes.push('util/dom.js');
 						includes.push('core/ext-alohaproxy.js');
 						includes.push('core/ext-alohareader.js');
@@ -166,28 +191,10 @@
 //						includes.push('plugin/link/src/link.js');
 //						includes.push('plugin/image/src/image.js');
 //						includes.push('plugin/highlighteditables/src/highlighteditables.js');
-						for (var i=0,n=includes.length; i<n; ++i ) {
-							value = includes[i];
-							url = window.GENTICS_Aloha_base + '/' + value;
-							// Append via Write
-//							document.write('<script defer src="'+url+'"></script>');
-//							continue;
-							/* Append via jQuery - no debugging allowed
-							window.jQuery.ajax({
-								dataType : 'script',
-								async: false,
-								url: url
-							}); // */
-							//* enable debugging  
-							var appendEl = document.head,
-						    	scriptEl = document.createElement('script');
-							scriptEl.src = url;
-							scriptEl.setAttribute('defer','defer'); 
-							appendEl.appendChild(scriptEl);
-							// */
-							continue;
-							
-						}
+						
+						
+						//Initialize
+						loadJsFileAtIncludesCounter();
 					}
 				},
 		        /**
@@ -318,6 +325,11 @@
 					}
 					KaraCos.alert_box.dialog({width: '400px', modal:true});
 					KaraCos.alert_box.dialog('show');
+				},
+				'log': function(message) {
+					if (window.console && console.log) {
+						console.log(message);
+					}
 				}
 		};
 
@@ -333,12 +345,16 @@
 				if (typeof that.config === "undefined") {
 					that.initMethods.push(param);
 				} else {
-					console.log('immediate run of method');
-					console.log(param);
+					if (window.console && console.log) {
+						console.log('immediate run of method');
+						console.log(param);
+					}
 					try {
 						param();
 					} catch (e) {
-						console.log(e);
+						if (window.console && console.log) {
+							console.log(param);
+						}
 					}
 				}
 				return;
@@ -353,11 +369,15 @@
 				KaraCos = karacos;
 				for (var i = 0; i < len ; i++) {
 					try{
-						console.log("running func " + i);
-						console.log(karacos.initMethods[i]);
+						if (window.console && console.log) {
+							console.log("running func " + i);
+							console.log(karacos.initMethods[i]);
+						}
 						karacos.initMethods[i]();
 					} catch (e) {
-						console.log(e);
+						if (window.console && console.log) {
+							console.log(e);
+						}
 					}
 				}
 				return karacos;

@@ -56,15 +56,22 @@ KaraCos.Browser = function(config) {
 							data: $.toJSON(panel.datasource.params),
 							success: function(data) {
 								$panel.append(template.expand(data));
+								self.$browserdiv.append($panel);
+								self.$browserdiv.dialog({width: '600px', modal:false});
+								$panel.find(".kc_browser_item").each(function(idx,pitem){
+									$(pitem).click(function(event){
+										var $this = $(this);
+//										console.log("Explorer item clicked");
+										if (typeof panel.onselect === 'function') {
+											panel.onselect($this);
+										}
+									});
+								});
 							}
 						});
 					}
 				});
 			}
-			
-			
-			self.$browserdiv.append($panel);
 		});
-		self.$browserdiv.dialog({width: '600px', modal:false});
 	}
 }

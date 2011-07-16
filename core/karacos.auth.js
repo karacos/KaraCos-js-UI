@@ -26,7 +26,7 @@
 			if (typeof elem === 'string') {
 				elem = KaraCos(elem);
 			}
-			that.menucontainer = KaraCos('<span id="karacos_actions_toolbar" class="ui-widget-header ui-corner-bl ui-corner-br" style="padding: 10px 4px;"></span>');
+			that.menucontainer = KaraCos('<span id="karacos_actions_toolbar" style="padding: 10px 4px;"></span>');
 			elem.empty().append(that.menucontainer);
 			if (that.menucontainer.length !== 0) { // if not none
 				that.menucontainer.empty();

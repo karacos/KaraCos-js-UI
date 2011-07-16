@@ -210,7 +210,7 @@
 				    scriptEl = document.createElement('div');
 					scriptEl.src = '/_browser/aloha/src/aloha.js';
 					scriptEl.id = 'aloha-script-include';
-					scriptEl.setAttribute('data-plugins', "format,image,link,dragndropfiles"); //highlighteditables,
+					scriptEl.setAttribute('data-plugins', "format,image,link,dragndropfiles,highlighteditables,inputcontrol"); //,
 					//scriptEl.setAttribute('defer','defer'); // */
 					appendEl.appendChild(scriptEl);
 					

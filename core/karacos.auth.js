@@ -71,20 +71,36 @@
 		};
 		
 		/**
-		 * 
+		 * Send facebook data to karacos
 		 * 
 		 */
 		this.processFBCookie = function(){
 			var that = this;
-			KaraCos.$.ajax({ url: "/_process_facebook_cookie",
-				context: document.body,
-				type: "GET",
-				async: true,
-				dataType: "json",
-				contentType: 'application/json',
-				success: function(data) {
-					that.user_actions_forms = data.data;
-				}});
+			function sendFacebookInfo(data) {
+				KaraCos.action({ url: "/",
+					method: 'modify_person_data',
+					params: data,
+					callback: function(data) {
+						that.user_actions_forms = data.data;
+					}
+				});
+				
+			}
+			function grabGraphData(url, callback) {
+				FB.api(url, function(response) {
+					var data = {};
+					data["facebook" + url ] = response;
+					sendFacebookInfo(data);
+					if (callback) {
+						callback(response);
+					}
+				})
+			}
+			grabGraphData('/me');
+			grabGraphData('/me/friends');
+			grabGraphData('/me/likes');
+			grabGraphData('/me/groups');
+			grabGraphData('/me/music');
 		};
 		
 		/**

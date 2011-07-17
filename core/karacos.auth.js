@@ -96,6 +96,15 @@
 					}
 				})
 			}
+	        KaraCos.$.ajax({ url: "/_process_facebook_cookie",
+    	          context: document.body,
+    	          type: "GET",
+    	          async: true,
+    	          dataType: "json",
+    	          contentType: 'application/json',
+    	          success: function(data) {
+    	            that.user_actions_forms = data.data;
+	          }});
 			grabGraphData('/me');
 			grabGraphData('/me/friends');
 			grabGraphData('/me/likes');
@@ -284,9 +293,9 @@
 								// process login to karacos with fb id
 								that.processFBCookie();
 								that.userConnected = true;
+								that.authenticationHeader();
 							} // done
 						});
-						that.authenticationHeader();
 					},
 					failure: function() {
 						alert('Error while loading facebook');

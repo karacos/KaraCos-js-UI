@@ -378,6 +378,28 @@
 					if (window.console && console.log) {
 						console.log(message);
 					}
+				},
+				'change_page': function(data) {
+					this.config.page_id = data.id;
+					this.config.page_base_id = data.base_id;
+					$("head title").text(data.title);
+					$('head meta[property*="og:title"]').attr('content', data.title);
+					$('head meta[property*="og:type"]').attr('content', data.type);
+					$('head meta[property*="og:url"]').attr('content', data.url);
+					if (typeof data.description === "string") {
+						$('head meta[name*="description"]').attr('content',$(data.description).text());
+					}
+					if (typeof data.keywords === "string") {
+						$('head meta[name*="keywords"]').attr('content',$(data.keywords).text());
+					}
+					$('head [property*="og:title"]').attr('content', data.title);
+				},
+				'parse_FBML': function() {
+					if (this.config.auth.facebook) {
+						if (FB !== undefined) {
+							FB.XFBML.parse();
+						}
+					}
 				}
 		};
 

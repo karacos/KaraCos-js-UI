@@ -196,7 +196,7 @@
 				url: "/",
 				form: "login",
 				callback: function(data, form) {
-					
+					data.redirect_uri = "http://" + KaraCos.config.fqdn + KaraCos.config.page_url;
 					var login_form_template = jsontemplate.Template(form, KaraCos.jst_options);
 					that.loginWindow.empty().append(login_form_template.expand(data));
 					$('#karacos_login_accordion').accordion({

@@ -394,11 +394,14 @@
 					}
 					$('head [property*="og:title"]').attr('content', data.title);
 				},
-				'parse_FBML': function() {
+				'parse_social': function() {
 					if (this.config.auth.facebook) {
-						if (FB !== undefined) {
+						if (typeof FB !== "undefined") {
 							FB.XFBML.parse();
 						}
+					}
+					if (typeof gapi !== "undefined") {
+						gapi.plusone.go("social_plugins");
 					}
 				}
 		};

@@ -283,6 +283,13 @@
 						}
 					}); // POST
 				},
+				/**
+				 * object param attributes :
+				 * 		url string url
+				 * 		form string form name
+				 * 		callback function (data, form)
+				 * 		error function()
+				 */
 				'getForm': function(object) {
 					var url = (object.url === undefined || object.url === "") ? "/" : object.url,
 							acturl = (url.substring(url.length - 1) == "/" ? url : (url +"/")) +
@@ -382,6 +389,9 @@
 				'change_page': function(data) {
 					this.config.page_id = data.id;
 					this.config.page_base_id = data.base_id;
+					if (typeof data.page_url === "string") {
+						this.config.page_url = data.page_url;
+					}
 					$("head title").text(data.title);
 					$('head meta[property*="og:title"]').attr('content', data.title);
 					$('head meta[property*="og:type"]').attr('content', data.type);

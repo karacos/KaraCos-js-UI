@@ -287,8 +287,9 @@
 				 * object param attributes :
 				 * 		url string url
 				 * 		form string form name
-				 * 		callback function (data, form)
-				 * 		error function()
+				 * 		callback function (data, form) -> success with params required
+				 * 		error function() -> failure while getting form data and form
+				 * 		noparams successfully called method with no params
 				 */
 				'getForm': function(object) {
 					var url = (object.url === undefined || object.url === "") ? "/" : object.url,
@@ -302,7 +303,7 @@
 						context: document.body,
 						type: "GET",
 						success: function(data) {
-							if (data.success) {
+							if (data.success === true && typeof data.form === 'object') {
 								$.ajax({ url: "/fragment/" + object.form +".jst",
 									context: document.body,
 									type: "GET",
@@ -318,8 +319,14 @@
 										object.error();
 									}
 								});
+							} else if (data.success === true && typeof data.form === 'undefined') {
+								// there is no params to give to method, call has already been processed
+								if (object.noparams) {
+									object.noparams(data);
+								}
+								
 							} else {
-								if (typeof error !== "undefined") {
+								if (typeof object.error !== "undefined") {
 									object.error(data);
 								}
 							}

@@ -49,13 +49,13 @@
 						fblogin = KaraCos('<button>Se connecter avec facebook</button>');
 						fblogin.button().click(function(){
 							FB.login(function(response) {
-								  if (response.session) {
+								  if (response.authResponse) {
 								    // user successfully logged in
 								  } else {
 								    // user cancelled login
 								  }
 								});
-							}, {perms:'email'});
+							}, {scope:'email'});
 						that.menucontainer.append(fblogin);
 					
 				}
@@ -258,7 +258,7 @@
 				that.user_actions_forms = data.data;
 			}
 		});
-		if (this.config.facebook) {
+		if (this.config.facebook) { //processing facebook initialization
 			try {
 				KaraCos.$.ajax({
 					url:'http://connect.facebook.net/en_US/all.js',

@@ -37,6 +37,7 @@
 					KaraCos.$.ajax({ url: '/fragment/actions_menu.html?instance_id=' +
 							KaraCos.config.page_id + "&base_id=" + KaraCos.config.page_base_id,
 						async: true,
+						cache: false,
 						context: document.body,
 						type: "GET",
 						success: function(data) {
@@ -100,6 +101,7 @@
     	          context: document.body,
     	          type: "GET",
     	          async: true,
+    	          cache: false,
     	          dataType: "json",
     	          contentType: 'application/json',
     	          success: function(data) {
@@ -168,6 +170,7 @@
 			auth.user_actions_forms = useractionsforms;
 			KaraCos.$.ajax({
 				url: History.getState().url,
+				cache: false,
 				headers: {'karacos-fragment': 'true'},
 				success: function(data) {
 					KaraCos(KaraCos.config.main_content).empty().append(data);
@@ -263,6 +266,7 @@
 				KaraCos.$.ajax({
 					url:'http://connect.facebook.net/en_US/all.js',
 					async: true,
+					cache: false,
 					dataType: 'script',
 					success: function() { 
 						FB.init(that.config.facebook);

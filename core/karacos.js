@@ -43,6 +43,7 @@
 			dataType: "json",
 			contentType: 'application/json',
 			async: false,
+			cache: false,
 			data: $.toJSON({
 				'method' : method,
 				'id' : 1,
@@ -78,9 +79,10 @@
     // Bind to StateChange Event
     History.Adapter.bind(window,'statechange',function(){ // Note: We are using statechange instead of popstate
         var State = History.getState(); // Note: We are using History.getState() instead of event.state
-        History.log(State.data, State.title, State.url);
+        //History.log(State.data, State.title, State.url);
         KaraCos.$.ajax({
 			url: State.url,
+			cache: false,
 			headers: {'karacos-fragment': 'true'},
 			success: function(data) {
 				KaraCos(KaraCos.config.main_content).empty().append(data);
@@ -264,6 +266,7 @@
 						contentType: 'application/json',
 						context: document.body,
 						type: "POST",
+						cache: false,
 						data: $.toJSON(data),
 						success: function(result) {
 							if (result.success) {
@@ -299,6 +302,7 @@
 					that.$.ajax({ url: acturl,
 						dataType: "json",
 						async: true,
+						cache: false,
 						contentType: 'application/json',
 						context: document.body,
 						type: "GET",
@@ -308,6 +312,7 @@
 									context: document.body,
 									type: "GET",
 									async: false,
+									cache: false,
 									success: function(form) {
 										if (typeof object.callback !== "undefined") {
 											object.callback(data,form);

@@ -393,6 +393,72 @@
 					KaraCos.alert_box.dialog({width: '400px', modal:true});
 					KaraCos.alert_box.dialog('show');
 				},
+				'activate_kc_buttons': function (container) {
+					container.find(".kc_action").button().click(function(event){
+						var $thisa = $(this).find("a"),
+							actionName = $thisa.attr("action"),
+							targeturl = $thisa.attr("href"),
+							buttonCallback = $thisa.data("callback"),
+							dialogwin = $('#dialog_window');
+						if (dialogwin.length === 0) {
+							KaraCos.$('body').append('<div id="dialog_window"/>');
+							dialogwin = $('#dialog_window');
+						} // sa.length
+						event.preventDefault();
+						event.stopImmediatePropagation();
+						KaraCos.getForm({
+							url: targeturl,
+							form: actionName,
+							noparams: function(data) { // case of a direct call to method without parameters required
+								if (data.success) {
+									dialogwin.empty()
+										.append('<p class="success_label">Operation reussie</p>')
+										.append('<p class="success_message">' + data.message + '</p>').dialog({modal: true}).show();
+									if (typeof buttonCallback === "function") {
+										buttonCallback();
+									}
+								}
+							},
+							callback:  function(data, form){
+								var create_project_form_template = jsontemplate.Template(form, KaraCos.jst_options);
+								dialogwin.empty().append(create_project_form_template.expand(data));
+								dialogwin.find('.form_'+ data.action +'_button').button().click(function(event){
+									var $this = $(this),
+										params = {},
+										method;
+									event.preventDefault();
+									event.stopImmediatePropagation();
+									$.each($(this).closest('form').serializeArray(), function(i, field) {
+										if (field.name === "method") {
+											method = field.value;
+										} else {
+											params[field.name] = field.value;
+										}
+									}); // each
+									KaraCos.action({ url: targeturl,
+										method: method,
+										async: false,
+										params: params,
+										callback: function(data) {
+											if (data.success) {
+												dialogwin.empty()
+													.append('<p class="success_label">Operation reussie</p>')
+													.append('<p class="success_message">' + data.message + '</p>');
+												if (typeof buttonCallback === "function") {
+													buttonCallback();
+												}
+											}
+										},
+										error: function(data) {}
+									});
+									return false;
+								});
+								dialogwin.dialog({modal: true}).show();
+							},
+							error: function(){}
+						});
+					});
+				},
 				'log': function(message) {
 					if (window.console && console.log) {
 						console.log(message);

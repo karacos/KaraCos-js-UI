@@ -492,33 +492,19 @@
 						gapi.plusone.go("social_plugins");
 					}
 				}
-		};
+		}, karacos = null;
 
-		function karacos(param) {
+		karacos = function(param) {
 			var len;
 			if (typeof param === 'undefined') {
 				return that;
 			}
 			if (typeof param === 'function') {
-				if (that.initMethods === undefined) {
-					that.initMethods = [];
+				if (window.console && console.log) {
+					console.log("Binding function for karacosReady");
+					console.log(param);
 				}
-				if (typeof that.config === "undefined") {
-					that.initMethods.push(param);
-				} else {
-					if (window.console && console.log) {
-						console.log('immediate run of method');
-						console.log(param);
-					}
-					try {
-						param();
-					} catch (e) {
-						if (window.console && console.log) {
-							console.log(param);
-						}
-					}
-				}
-				return;
+				$('head').bind('karacosReady', param);
 			} 
 			if (typeof param === 'object') {
 				if (typeof karacos.config !== "undefined") {
@@ -526,21 +512,11 @@
 				}
 				that.$.extend(true,karacos,that);
 				karacos.config = param;
-				len = karacos.initMethods.length;
 				KaraCos = karacos;
-				for (var i = 0; i < len ; i++) {
-					try{
-						if (window.console && console.log) {
-							console.log("running func " + i);
-							console.log(karacos.initMethods[i]);
-						}
-						karacos.initMethods[i]();
-					} catch (e) {
-						if (window.console && console.log) {
-							console.log(e);
-						}
-					}
+				if (window.console && console.log) {
+					console.log("Triggering event karacosReady");
 				}
+				$('head').trigger('karacosReady');
 				return karacos;
 			}
 			if (typeof param === 'string') {
@@ -550,9 +526,11 @@
 		}
 		return karacos;
 	}; // karacosConstructor
-	
 	window.KaraCos = karacosConstructor();
-	
+	if (window.console && console.log) {
+		console.log("Creating promise event karacosReady");
+	}
+	$('head').createPromiseEvent('karacosReady');
 	window.onerror = function (msg, url, linenumber) {
 		return true;
 	};

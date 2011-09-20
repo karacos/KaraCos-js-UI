@@ -180,6 +180,21 @@
 			
 		};
 		/**
+		 * Check if user is authorized to compute given action name
+		 * 
+		 */
+		this.hasAction = function(actionName) {
+			var result = false;
+			$.each(this.user_actions_forms.actions, function(id,action){
+				if (action.action === actionName) {
+					result = true;
+				}
+			})
+			
+			return result;
+		};
+		
+		/**
 		 * 
 		 * @param callback
 		 * @returns
@@ -313,6 +328,7 @@
 		that.authenticationHeader();
 	}; // function authManager
 	KaraCos(function(){
+		KaraCos.log("authManager initialization");
 		KaraCos.authManager = new authManager(KaraCos.config.auth);
 	});
 })(window, document);

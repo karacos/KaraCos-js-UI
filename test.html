@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>jQuery+RequireJS Sample Page</title>
+        <!-- This is a special version of jQuery with RequireJS built-in -->
+        <script src="deps/require.js"></script>
+        <script type="text/javascript">
+  require.config({
+    baseUrl: "/_browser/aloha/src/lib",
+    paths: {
+        "karacos": "/_browser/karacos-ui"
+    },
+    waitSeconds: 15,
+    locale: "fr-fr"
+  });
+  require(["karacos/main"],function(){
+	  require.ready(function(){
+	  })
+  })
+  </script>
+    </head>
+    <body>
+        <h1>jQuery+RequireJS Sample Page</h1>
+        <p>Look at source or inspect the DOM to see how it works.</p>
+    </body>
+    <script>
+    require(["karacos/jquery"],function(){
+		$('body').bind('karacosCoreLoaded', function(){
+			console.log("event catched in page");
+		});
+	});</script>
+</html>

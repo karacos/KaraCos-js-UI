@@ -55,10 +55,10 @@ $(function(){
 					};
 
 					VIE.ContainerManager.findAdditionalInstanceProperties = function(element, modelInstance){
-						if (element.attr("lang") != "") {
+						if (element.attr("lang") !== undefined) {
 							modelInstance.set({lang: element.attr("lang")});
 						}
-						if (element.attr("url") != "") {
+						if (element.attr("url") !== undefined) {
 							modelInstance.set({url: element.attr("url")});
 						}
 					};
@@ -106,7 +106,7 @@ $(function(){
 									scriptEl.id = 'aloha-style-include';
 									scriptEl.setAttribute('type','text/css'); // */
 									appendEl.appendChild(scriptEl);
-									$('body').append('<div style="display: none" <img src="/_browser/aloha/src/require.js" data-aloha-plugins="common/format"/></div>');
+									$('body').append('<div style="display: none"><img src="/_browser/aloha/src/require.js" data-aloha-plugins="common/format,media/image"/></div>');
 										
 //									appendEl.appendChild(scriptEl);
 //								    scriptEl = document.createElement('div');

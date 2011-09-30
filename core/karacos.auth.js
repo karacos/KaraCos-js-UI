@@ -40,18 +40,21 @@ require(
 							if (this.user_actions_forms.fullname) {
 								username = this.user_actions_forms.fullname;
 							}
-//							require(['fragment/actions_menu.js?instance_id=' +
-//										KaraCos.config.page_id + "&base_id=" + KaraCos.config.page_base_id]);
-							KaraCos.$.ajax({ url: 'fragment/actions_menu.html?instance_id=' +
-								KaraCos.config.page_id + "&base_id=" + KaraCos.config.page_base_id,
-								async: true,
-								cache: false,
-								context: document.body,
-								type: "GET",
-								success: function(data) {
-									that.menucontainer.empty().append(data);
-								}
+							require(['fragment/actions_menu.js?instance_id=' +
+										KaraCos.config.page_id + "&base_id=" + KaraCos.config.page_base_id],
+										function(menutool) {
+										menutool.drawMenu(that.menucontainer.empty());
 							});
+//							KaraCos.$.ajax({ url: 'fragment/actions_menu.html?instance_id=' +
+//								KaraCos.config.page_id + "&base_id=" + KaraCos.config.page_base_id,
+//								async: true,
+//								cache: false,
+//								context: document.body,
+//								type: "GET",
+//								success: function(data) {
+//									that.menucontainer.empty().append(data);
+//								}
+//							});
 							
 						} else {
 							if (typeof FB !== 'undefined') {

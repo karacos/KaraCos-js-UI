@@ -61,19 +61,19 @@
 				// Prepare
 				var
 					$this = jQuery(this),
-					Deferred = $this.data('defer-'+eventName),
+					Deferred = $this.data('defer-'+event.type),
 					specialEvent;
 				
 				// setup deferred object if the event has been triggered
 				// but not been setup before
-				if ( !Deferred ) {
-					specialEvent =  jQuery.event.special[eventName];
-					specialEvent.setup.call(this);
-					Deferred = $this.data('defer-'+eventName);
+				if ( !Deferred) {
+					specialEvent =  jQuery.event.special[event.type];
+					specialEvent.setup.call(this,event);
+					Deferred = $this.data('defer-'+event.type);
 				}
 				
 				// Update Status
-				$this.data('defer-'+eventName+'-resolved',true);
+				$this.data('defer-'+event.type+'-resolved',true);
 
 				// Fire Deferred Events
 				Deferred.resolve();
@@ -91,7 +91,7 @@
 			setup: function( data, namespaces ) {
 				//console.log('setup');
 				var $this = jQuery(this);
-				$this.data('defer-'+eventName, new jQuery.Deferred());
+				$this.data('defer-'+data.type, new jQuery.Deferred());
 			},
 
 			// Do something when the last event handler is unbound from a particular element.
@@ -107,12 +107,12 @@
 				// Prepare
 				var
 					$this = jQuery(this),
-					Deferred = $this.data('defer-'+eventName),
-					specialEvent =  jQuery.event.special[eventName];
+					Deferred = $this.data('defer-'+handleObj.type),
+					specialEvent =  jQuery.event.special[handleObj.type];
 
 				// Check
 				if ( !Deferred ) {
-					specialEvent.setup.call(this);
+					specialEvent.setup.call(this,handleObj);
 					return specialEvent.add.apply(this,[handleObj]);
 				}
 
@@ -147,6 +147,7 @@
 
 		// Create the Special Event
 		jQuery.event.special[eventName] = jQuery.event.special[eventName] || {
+			name: eventName,
 			setup: events.setup,
 			teardown: events.teardown,
 			add: events.add,
@@ -162,4 +163,4 @@
 		return $this;
 	};
 
-})($);
+})(window.kcQuery);

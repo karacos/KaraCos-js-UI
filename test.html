@@ -13,19 +13,50 @@
     waitSeconds: 15,
     locale: "fr-fr"
   });
-  require(["karacos/main"],function(){
+  require(["order!karacos/jquery","order!karacos/main"],function(){
 	  require.ready(function(){
-	  })
-  })
+		  var
+  		scriptEl,
+  		appendEl = document.head || document.getElementsByTagName('head')[0];
+	 	// TODO: without this line, duplicate jQuery (and jQ plugins)
+	 	// window.alohaQuery = jQuery;	
+	 	// TODO : with this line, problem with jQuery.promise ... Disabling for now
+	 	scriptEl = document.createElement('link');
+		scriptEl.rel = 'stylesheet';
+		scriptEl.href = '/_browser/aloha/src/css/aloha.css';
+		scriptEl.id = 'aloha-style-include';
+		scriptEl.setAttribute('type','text/css'); // */
+		appendEl.appendChild(scriptEl);
+		$('body').append('<div style="display: none"> <img src="/_browser/aloha/src/require.js" data-aloha-plugins="common/format"/></div>');
+		require(['aloha'], function() {
+			kcQuery('body').bind('aloha',function(){
+				console.log("activating editor for semantic entity");
+				kcQuery('[typeof][about]').find("[property]").aloha();
+			});
+		});
+	  });
+  });
   </script>
     </head>
     <body>
         <h1>jQuery+RequireJS Sample Page</h1>
         <p>Look at source or inspect the DOM to see how it works.</p>
+        <div typeof="urn:uuid:toto" about="me">
+        	<div property="title">Le titre</div>
+        </div>
     </body>
     <script>
     require(["karacos/jquery"],function(){
 		$('body').bind('karacosCoreLoaded', function(){
+			KaraCos({
+				fqdn: 'local.nka.me:65080',
+				page_url: '/',
+				page_id: '3423535343',
+				main_content: "#main",
+				page_base_id: '231242432353523',
+				auth: {
+				}
+			});
 			console.log("event catched in page");
 		});
 	});</script>

@@ -1,8 +1,12 @@
 
 define(
-	['vendor/jquery-1.6.1'],
+	[],
 	function() {
+		if (window.kcQuery === undefined) {
 			var loadedJQuery = window.$.noConflict(true);
-			define("jquery",[],function(){return loadedJQuery});
+			define("jquery",[],function(){return window.jQuery = window.kcQuery = loadedJQuery});
 			return window.jQuery = window.kcQuery = loadedJQuery;// loadedJQuery;
+		} else {
+			return window.jQuery = window.kcQuery;
+		}
 	});

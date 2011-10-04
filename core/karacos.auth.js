@@ -36,7 +36,7 @@ require(
 						elem.append(menucontainer);
 					}
 					// request (and draw action menu for current node
-					require(['fragment/actions_menu.js?instance_id=' +
+					require(['/fragment/actions_menu.js?instance_id=' +
 					         KaraCos.config.page_id + "&base_id=" + KaraCos.config.page_base_id],
 					         function(menutool) {
 						menutool.drawMenu(menucontainer.empty());
@@ -167,11 +167,11 @@ require(
 //					
 					return KaraCos.authManager.user_actions_forms.actions.map(
 							function(e,i,a) {
-								if (e.action === "_update") {
+								if (e.action === actionName) {
 									return true;
 								}
 							}).reduce(function(r,e,i) {
-								console.log(arguments)
+								//console.log(arguments)
 								if (r === true || e === true) {
 									return true;
 								}

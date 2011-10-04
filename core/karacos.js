@@ -102,7 +102,13 @@
 							        		function(){
 							        			var
 								        			scriptEl = document.createElement('link'),
-								        			appendEl = document.head || document.getElementsByTagName('head')[0];
+								        			appendEl = document.head || document.getElementsByTagName('head')[0],
+							        				loading = $('#alohaLoading');
+							        			if (loading.length === 0) {
+							        				loading = $('<div id="alohaLoading">');
+							        				$('body').append(loading);
+							        			}
+							        			loading.dialog({modal: 'true'}).show();
 							        			scriptEl.rel = 'stylesheet';
 							        			scriptEl.href = '/_browser/aloha/src/css/aloha.css';
 							        			scriptEl.id = 'aloha-style-include';
@@ -111,13 +117,6 @@
 							        			$('body').append('<div style="display: none"><img src="/_browser/aloha/src/require.js" data-aloha-plugins="common/format,media/image"/></div>');
 							        			require(['vendor/ext-3.2.1/ext-all-debug'],function() {
 						        					require(['aloha-bootstrap'], function() {
-						        						var loading = $('#alohaLoading');
-						        						if (loading.length === 0) {
-						        							loading = $('<div id="alohaLoading">');
-						        							$('body').append(loading);
-						        						}
-						        						loading.empty().append('Please wait while editor is loading');
-						        						loading.dialog({modal: 'true'}).show();
 						        						Aloha.ready(function(){
 						        							loading.dialog('close');
 						        						});

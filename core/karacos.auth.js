@@ -21,65 +21,26 @@ require(
 					var that = this,
 					isconnected = this.isUserConnected(),
 					username = this.user_actions_forms.user,
-					logout,
-					login,
-					fblogin;
+					menucontainer;
 					
 					if (elem === undefined) {
 						// default id
-						elem = KaraCos.$('#header_auth_button');
+						elem = $('#header_auth_button');
 					}
 					if (typeof elem === 'string') {
-						elem = KaraCos(elem);
+						elem = $(elem);
 					}
-					that.menucontainer = KaraCos('<span id="karacos_actions_toolbar" style="padding: 10px 4px;"></span>');
-					elem.empty().append(that.menucontainer);
-					if (that.menucontainer.length !== 0) { // if not none
-						that.menucontainer.empty();
-						if (isconnected) {
-							if (this.user_actions_forms.fullname) {
-								username = this.user_actions_forms.fullname;
-							}
-							require(['fragment/actions_menu.js?instance_id=' +
-										KaraCos.config.page_id + "&base_id=" + KaraCos.config.page_base_id],
-										function(menutool) {
-										menutool.drawMenu(that.menucontainer.empty());
-							});
-//							KaraCos.$.ajax({ url: 'fragment/actions_menu.html?instance_id=' +
-//								KaraCos.config.page_id + "&base_id=" + KaraCos.config.page_base_id,
-//								async: true,
-//								cache: false,
-//								context: document.body,
-//								type: "GET",
-//								success: function(data) {
-//									that.menucontainer.empty().append(data);
-//								}
-//							});
-							
-						} else {
-							if (typeof FB !== 'undefined') {
-								fblogin = KaraCos('<button>Se connecter avec facebook</button>');
-								fblogin.button().click(function(){
-									FB.login(function(response) {
-										  if (response.authResponse) {
-										    // user successfully logged in
-										  } else {
-										    // user cancelled login
-										  }
-										});
-									}, {scope:'email'});
-								that.menucontainer.append(fblogin);
-							
-						}
-						login = KaraCos('<button>Se connecter (inscription au site)</button>');
-						login.button().click(function(){
-							that.provideLoginUI(function(){
-								that.authenticationHeader(elem);
-							});
-						});
-						that.menucontainer.append(login);
+					menucontainer = elem.find('#karacos_actions_toolbar');
+					if (menucontainer.length === 0) {
+						menucontainer = $('<span id="karacos_actions_toolbar" style="padding: 10px 4px;"></span>');
+						elem.append(menucontainer);
 					}
-					}
+					// request (and draw action menu for current node
+					require(['fragment/actions_menu.js?instance_id=' +
+					         KaraCos.config.page_id + "&base_id=" + KaraCos.config.page_base_id],
+					         function(menutool) {
+						menutool.drawMenu(menucontainer.empty());
+					});
 				};
 				
 				/**
@@ -145,7 +106,7 @@ require(
 									}
 								});
 							} else {
-								return this.userConnected;
+								return this.userConnected = false;
 							}
 						} else { // user known in karacos
 							this.userConnected = true;
@@ -196,13 +157,26 @@ require(
 				 */
 				this.hasAction = function(actionName) {
 					var result = false;
-					$.each(this.user_actions_forms.actions, function(id,action){
-						if (action.action === actionName) {
-							result = true;
-						}
-					})
 					
-					return result;
+					// TODO : bench this solution and the next one...
+//					$.each(this.user_actions_forms.actions, function(id,action){
+//						if (action.action === actionName) {
+//							result = true;
+//						}
+//					})
+//					
+					return KaraCos.authManager.user_actions_forms.actions.map(
+							function(e,i,a) {
+								if (e.action === "_update") {
+									return true;
+								}
+							}).reduce(function(r,e,i) {
+								console.log(arguments)
+								if (r === true || e === true) {
+									return true;
+								}
+								
+							});
 				};
 				
 				/**

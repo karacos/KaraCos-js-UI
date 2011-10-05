@@ -1,7 +1,7 @@
 require(
-	[],
-	function() {
-	var $ = window.kcQuery;
+	['jquery'],
+	function($) {
+	//var $ = window.kcQuery;
 	//$(function(){
 		$('body').createPromiseEvent('kcauth');
 		$('body').bind('kccore',function(){ //
@@ -32,7 +32,7 @@ require(
 					}
 					menucontainer = elem.find('#karacos_actions_toolbar');
 					if (menucontainer.length === 0) {
-						menucontainer = $('<span id="karacos_actions_toolbar" style="padding: 10px 4px;"></span>');
+						menucontainer = $('<div id="karacos_actions_toolbar" style="padding: 10px 4px;"></div>');
 						elem.append(menucontainer);
 					}
 					// request (and draw action menu for current node

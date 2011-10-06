@@ -396,6 +396,9 @@
 									$('body').bind('kccore', function(){
 										that.$.extend(true,karacos,that);
 										window.KaraCos = KaraCos = karacos;
+										define('karacos',[], function(){
+											return karacos;
+										});
 										if (window.console && console.log) {
 											console.log("Triggering event kcready");
 										}
@@ -424,5 +427,7 @@
 					});
 				});
 	})
-	
+	define('karacos',[], function(){
+		return window.KaraCos;
+	});
 })(window.kcQuery);

@@ -29,7 +29,7 @@
 							delete dataObject.id;
 							delete dataObject.url;
 							
-							if (model.type === "karacos:method") {
+							if (model.getType() === "karacos:method") {
 								idparts = model.id.split(":");
 								method = idparts[3];
 							} 

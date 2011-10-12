@@ -32,7 +32,7 @@ require(
 					}
 					menucontainer = elem.find('#karacos_actions_toolbar');
 					if (menucontainer.length === 0) {
-						menucontainer = $('<div id="karacos_actions_toolbar" style="padding: 10px 4px;"></div>');
+						menucontainer = $('<div id="karacos_actions_toolbar"></div>');
 						elem.append(menucontainer);
 					}
 					// request (and draw action menu for current node
@@ -184,11 +184,15 @@ require(
 				 * @param callback
 				 * @returns
 				 */
-				this.provideLoginUI = function(callback, error){
-					var that = this;
+				this.provideLoginUI = function(callback, error, message){
+					var 
+						that = this;
 					if (this.isUserConnected()) {
 						callback();
 						return;
+					}
+					if (typeof error !== "function") {
+						message = error;
 					}
 					this.loginWindow = $('#login_form_window');
 					if (this.loginWindow.length === 0) {
@@ -199,8 +203,12 @@ require(
 						url: "/",
 						form: "login",
 						callback: function(data, form) {
+							var 
+								login_form_template = jsontemplate.Template(form, KaraCos.jst_options);
+							
 							data.redirect_uri = "http://" + KaraCos.config.fqdn + KaraCos.config.page_url;
-							var login_form_template = jsontemplate.Template(form, KaraCos.jst_options);
+							data.message = message;
+							
 							that.loginWindow.empty().append(login_form_template.expand(data));
 							$('#karacos_login_accordion').accordion({
 								autoHeight: false,

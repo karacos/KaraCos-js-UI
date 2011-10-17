@@ -108,13 +108,14 @@
 							        				loading = $('<div id="alohaLoading">');
 							        				$('body').append(loading);
 							        			}
-							        			loading.dialog({modal: 'true'}).show();
+							        			loading.dialog({modal: 'true', title:"Chargement de l'editeur"}).show();
 							        			scriptEl.rel = 'stylesheet';
 							        			scriptEl.href = '/_browser/aloha/src/css/aloha.css';
 							        			scriptEl.id = 'aloha-style-include';
 							        			scriptEl.setAttribute('type','text/css'); // */
 							        			appendEl.appendChild(scriptEl);
-							        			$('body').append('<div style="display: none"><img src="/_browser/aloha/src/require.js" data-aloha-plugins="common/format,media/image"/></div>');
+							        			// Insert element for Aloha plugins lookup
+							        			$('body').append('<div style="display: none"><img src="/_browser/aloha/src/require.js" data-aloha-plugins="common/format,media/image,extra/browser,media/draganddropfiles"/></div>');
 							        			require(['vendor/ext-3.2.1/ext-all-debug'],function() {
 						        					require(['aloha-bootstrap'], function() {
 						        						Aloha.ready(function(){

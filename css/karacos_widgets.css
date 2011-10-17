@@ -10,3 +10,22 @@
 #karacos_actions_toolbar li {
 	min-width: 100px;
 	}
+#alohaLoading {
+	background-image: url(/_browser/aloha/src/demo/boilerplate/img/aloha-editor-logo.png);
+	background-repeat: no-repeat;
+	width: 256px;
+	height: 126px;
+	background-color: white;
+	}
+
+#karacos_browser_window > div {
+	
+	
+}
+	
+#karacos_browser_window > div > div.img_grid_chooser {
+	float: left;
+	padding: 2px;
+	margin: 2px;
+	border: 1px solid black;
+}

@@ -1,0 +1,21 @@
+	<div id="karacos_${action}_form">
+    	<h3 style="margin:0;padding:2px"><a href='#'>${form.title}</a></h3>
+    	<div style="margin:0;padding:2px">
+	        <form method="POST" action="${acturl}">
+	            <input type="hidden" name="method" value="${action}"/>
+	            {{if form.fields}}
+	                <table>
+	                {{each form.fields}}
+	                	{{if $value.formType}}
+	                		{{if $value.formType === "TEXTAREA" }}
+	                			<tr><td colspan="2"><div>${$value.title}</div><div><textarea>{{if $value.value}}${$value.value}{{/if}}</textarea></div></td></tr>
+	                		{{/if}}
+	                	{{else}}
+	                    	<tr><td>${$value.title}</td><td><input type="${$value.dataType}" name="${$value.name}" {{if $value.value}} value="${$value.value}"{{/if}} /></td></tr>
+	                    {{/if}}
+	                {{/each}}
+	               </table>
+	            {{/if}}
+	        </form>
+	    </div>
+   </div>

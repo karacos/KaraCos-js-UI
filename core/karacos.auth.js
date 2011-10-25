@@ -179,6 +179,25 @@ require(
 							});
 				};
 				
+				this.getForm = function(actionName) {
+					return KaraCos.authManager.user_actions_forms.actions.map(
+							function(e,i,a) {
+								if (e.action === actionName) {
+									return e;
+								}
+							}).reduce(function(r,e,i) {
+								//console.log(arguments);
+								if (r !== undefined || e !== undefined) {
+									if (e !== undefined) {
+										return e;
+									} else {
+										return r;
+									}
+								}
+								
+							});
+					
+				};
 				/**
 				 * 
 				 * @param callback

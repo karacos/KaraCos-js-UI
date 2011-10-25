@@ -115,7 +115,7 @@
 							        			scriptEl.setAttribute('type','text/css'); // */
 							        			appendEl.appendChild(scriptEl);
 							        			// Insert element for Aloha plugins lookup
-							        			$('body').append('<div style="display: none"><img src="/_browser/aloha/src/require.js" data-aloha-plugins="common/format,common/link,media/image,extra/browser,media/draganddropfiles"/></div>');
+							        			$('body').append('<div style="display: none"><img src="/_browser/aloha/src/require.js" data-aloha-plugins="common/format,common/link,common/image,extra/draganddropfiles"/></div>');
 							        			require(['vendor/ext-3.2.1/ext-all-debug'],function() {
 						        					require(['aloha-bootstrap'], function() {
 						        						Aloha.ready(function(){

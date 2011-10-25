@@ -13,7 +13,8 @@ function loadKaraCos() {
 			 "order!karacos/vendor/vie",
 			 "order!karacos/vendor/vie-containermanager",
 			 "order!karacos/vendor/vie-collectionmanager",
-			 "order!karacos/vendor/vie-aloha"
+			 "order!karacos/vendor/vie-aloha",
+			 "order!karacos/deps/jquery-tmpl"
 			],
 			 function() {
 				require(["karacos/core/karacos"]);

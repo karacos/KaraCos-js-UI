@@ -22,7 +22,19 @@ define("karacos/core/karacos.ui", ["jquery"], function($){
 			},
 			'alert': function(message, buttons) {
 				var ui = this;
-					ui.toolkit.alert(message, buttons);
+				ui.toolkit.alert(message, buttons);
+			},
+			/**
+			 * params : 
+			 * 		parent : container of header. buttons will be appended
+			 * 		options :
+			 * 			logout: callback function for triggering after logout button
+			 */
+			'headerButtons': function(parent,options) {
+				ui = this;
+				if (typeof ui.toolkit.headerButtons === "function") {
+					ui.toolkit.headerButtons(parent,options);
+				}
 			}
 	}
 });

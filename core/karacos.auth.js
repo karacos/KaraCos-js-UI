@@ -120,7 +120,7 @@ require(
 				/**
 				 * 
 				 */
-				this.logout = function(){
+				this.logout = function(callback){
 					var auth = this;
 					KaraCos.action({url:"/",
 						method:"logout", 
@@ -130,6 +130,17 @@ require(
 								FB.logout();
 							}
 							auth.userConnected = false;
+							KaraCos.action({
+								url:'/',
+								method:'get_user_actions_forms',
+								async: false,
+								callback:function(data) {
+									auth.user_actions_forms = data.data;
+									if (typeof callback === "function") {
+										callback();
+									}
+								}
+							});
 							auth.authenticationHeader();
 						}
 					});

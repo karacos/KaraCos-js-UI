@@ -164,11 +164,48 @@ require(
 					auth.authenticationHeader();
 					
 				};
+				this.getUserActions = function() {
+					var auth = this;
+					KaraCos.action({url:KaraCos.config.page_url,
+						method:"get_user_actions_forms", 
+						params:{},
+						async: false,
+						callback: function(result){
+							auth.current_page = [KaraCos.config.page_url, result.data] ;
+						}
+					});
+					return auth.current_page[1];
+				};
+				this.hasAction = function(actionName) {
+					var
+						getUserActions = false;
+					if (typeof this.current_page === "undefined"){
+						getUserActions = true;
+					}
+					if (KaraCos.page_url !== this.current_page) {
+						getUserActions = true;
+					}
+					if (getUserActions) {
+						this.getUserActions();
+					} 
+					return this.current_page[1].actions.map(
+							function(e,i,a) {
+								if (e.action === actionName) {
+									return true;
+								}
+							}).reduce(function(r,e,i) {
+								//console.log(arguments)
+								if (r === true || e === true) {
+									return true;
+								}
+							});
+								
+				};
 				/**
 				 * Check if user is authorized to compute given action name
 				 * 
 				 */
-				this.hasAction = function(actionName) {
+				this.hasDomainAction = function(actionName) {
 					var result = false;
 					
 					// TODO : bench this solution and the next one...
@@ -285,7 +322,7 @@ require(
 									}
 								}); // POST login form
 							});  // click
-							that.loginWindow.dialog({width: '600px', modal:true}).show();
+							that.loginWindow.dialog({width: '600px', modal:true, 'title': "Connexion au site"}).show();
 						} // get form success
 					});			
 				};

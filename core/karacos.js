@@ -4,7 +4,6 @@
 				[
 			 	"order!karacos/deps/json-template",
 		        "order!karacos/deps/modernizr-1.6.min"
-			        
 			    ],
 				function(){
 					"use strict";
@@ -131,17 +130,17 @@
 											data: $.toJSON(data),
 											success: function(result) {
 												if (result.success) {
-													if (typeof object.callback !== "undefined") {
+													if (typeof object.callback === "function") {
 														object.callback(result);
 													}
 												} else {
-													if (typeof object.error !== "undefined") {
+													if (typeof object.error === "function") {
 														object.error(result);
 													}
 												}
 											},
 											failure: function() {
-												if (typeof object.error !== "undefined") {
+												if (typeof object.error === "function") {
 													object.error();
 												}
 											}

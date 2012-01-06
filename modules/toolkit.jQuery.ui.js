@@ -37,7 +37,7 @@ function($) {
 	return {
 		"alert": function(message, buttons) {
 			var 
-			ui = this
+			ui = this,
 			button;
 		if (typeof ui.alert_box === "undefined") {
 			ui.alert_box = $('#kc_alert_box');

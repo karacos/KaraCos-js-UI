@@ -166,14 +166,16 @@ require(
 				};
 				this.getUserActions = function() {
 					var auth = this;
-					KaraCos.action({url:KaraCos.config.page_url,
-						method:"get_user_actions_forms", 
-						params:{},
-						async: false,
-						callback: function(result){
-							auth.current_page = [KaraCos.config.page_url, result.data] ;
-						}
-					});
+					if (typeof auth.current_page === "undefined" || KaraCos.config.page_url !== auth.current_page[0]) {
+						KaraCos.action({url:KaraCos.config.page_url,
+							method:"get_user_actions_forms", 
+							params:{},
+							async: false,
+							callback: function(result){
+								auth.current_page = [KaraCos.config.page_url, result.data] ;
+							}
+						});
+					}
 					return auth.current_page[1];
 				};
 				this.hasAction = function(actionName) {
@@ -181,9 +183,10 @@ require(
 						getUserActions = false;
 					if (typeof this.current_page === "undefined"){
 						getUserActions = true;
-					}
-					if (KaraCos.page_url !== this.current_page) {
-						getUserActions = true;
+					} else {
+						if (KaraCos.config.page_url !== this.current_page[0]) {
+							getUserActions = true;
+						}
 					}
 					if (getUserActions) {
 						this.getUserActions();
@@ -307,6 +310,8 @@ require(
 									params: params,
 									callback: function(data) {
 										if (data.success) {
+											that.current_page = undefined;
+											that.user_actions_forms = undefined;
 											that.login(data.data);
 											that.loginWindow.dialog('close');
 											if (typeof callback !== "undefined") {

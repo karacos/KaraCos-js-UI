@@ -37,11 +37,12 @@ require(
 					}
 					// request (and draw action menu for current node
 					$('body').bind('kcui', function(){
-					require(['/fragment/actions_menu.js?instance_id=' +
-			         KaraCos.config.page_id + "&base_id=" + KaraCos.config.page_base_id],
-			         function(menutool) {
-							menutool.drawMenu(menucontainer.empty());
-						});
+						$('body').trigger('authStateChange');
+//					require(['/fragment/actions_menu.js?instance_id=' +
+//			         KaraCos.config.page_id + "&base_id=" + KaraCos.config.page_base_id],
+//			         function(menutool) {
+//							menutool.drawMenu(menucontainer.empty());
+//						});
 					});
 				};
 				

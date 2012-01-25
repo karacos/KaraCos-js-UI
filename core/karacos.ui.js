@@ -5,6 +5,41 @@ define("karacos/core/karacos.ui", ["jquery"], function($){
 	$('body').bind('kcauth', function(){
 		karacos = window.KaraCos;
 	});
+	if (!('map' in Array.prototype)) {
+	    Array.prototype.map= function(mapper, that /*opt*/) {
+	        var other= new Array(this.length);
+	        for (var i= 0, n= this.length; i<n; i++)
+	            if (i in this)
+	                other[i]= mapper.call(that, this[i], i, this);
+	        return other;
+	    };
+	}
+	if(!Array.prototype.reduce) {
+		Array.prototype.reduce=function(fun){
+			var len=this.length>>>0;
+			if(typeof fun!="function")
+				throw new TypeError;
+			if(len==0&&arguments.length==1)
+				throw new TypeError;
+			var i=0;
+			if(arguments.length>=2)
+				var rv=arguments[1];
+			else {
+				do {
+					if(i in this){
+						var rv=this[i++];
+						break
+					}
+					if(++i>=len)
+						throw new TypeError;
+				} while(true)}
+			for(;i<len;i++) {
+				if(i in this)
+					rv=fun.call(undefined,rv,this[i],i,this);
+			}
+			return rv;
+		};
+	}
 	return {
 			'init': function(config) {
 				function initToolkit(toolkit){

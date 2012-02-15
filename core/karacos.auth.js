@@ -234,7 +234,7 @@ require(
 				};
 				
 				this.getForm = function(actionName) {
-					return KaraCos.authManager.user_actions_forms.actions.map(
+					return KaraCos.authManager.current_page[1].actions.map(
 							function(e,i,a) {
 								if (e.action === actionName) {
 									return e;

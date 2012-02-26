@@ -75,37 +75,23 @@
 							         * Helper for activating Aloha
 							         */
 							        'activate_aloha': function(callback) {
-							        	require(['vendor/ext-3.2.1/adapter/jquery/ext-jquery-adapter-debug'],
-							        		function(){
-							        			var
-								        			scriptEl = document.createElement('link'),
-								        			appendEl = document.head || document.getElementsByTagName('head')[0],
-							        				loading = $('#alohaLoading');
-							        			if (loading.length === 0) {
-							        				loading = $('<div id="alohaLoading">');
-							        				$('body').append(loading);
-							        			}
-							        			loading.dialog({modal: 'true', title:"Chargement de l'editeur"}).show();
-							        			scriptEl.rel = 'stylesheet';
-							        			scriptEl.href = '/_browser/aloha/src/css/aloha.css';
-							        			scriptEl.id = 'aloha-style-include';
-							        			scriptEl.setAttribute('type','text/css'); // */
-							        			appendEl.appendChild(scriptEl);
-							        			// Insert element for Aloha plugins lookup
-							        			$('body').append('<div style="display: none"><img src="/_browser/aloha/src/require.js" data-aloha-plugins="common/format,common/link,common/image,extra/browser,extra/draganddropfiles,karacos/repository,karacos/imageslist"/></div>');
-							        			require(['vendor/ext-3.2.1/ext-all-debug'],function() {
-						        					require(['aloha-bootstrap'], function() {
-						        						Aloha.ready(function(){
-						        							loading.dialog('close');
-						        							if (typeof callback === "function") {
-						        								callback();
-						        							}
-						        						});
-						        						window.jQuery = window.kcQuery;
-						        					});	
-							        			});
-							        		} // wrapped function
-							        	); // require
+							        	var loading = $('#alohaLoading');
+					        			if (loading.length === 0) {
+					        				loading = $('<div id="alohaLoading">');
+					        				$('body').append(loading);
+					        			}
+					        			loading.dialog({modal: 'true', title:"Chargement de l'editeur"}).show();
+							        	require({
+							    			context: 'aloha',
+							    			baseUrl: '/_browser/aloha/src/lib'
+							    		},['aloha'],function(Aloha){
+			        						Aloha.ready(function(){
+			        							loading.dialog('close');
+			        							if (typeof callback === "function") {
+			        								callback();
+			        							}
+			        						});
+					        			});
 									},
 							        /**
 									 * Process a KaraCos action

@@ -33,9 +33,16 @@ function startKaraCos() {
 								width: 430
 							},
 							bundles: {
-								karacos: "/_browser/karacos-ui/lib/ae-bundle"
+								custom: "/_browser/karacos-ui/lib/ae-bundle"
 							}, 
 							plugins: {
+								load: [ 'common/format',
+								        'common/link',
+								        'common/image',
+								        'common/highlighteditables',
+								        'common/paste',
+								        'custom/karacos-repository'
+								        ],
 								format: {
 									editables: {
 										'[property*="title"]': [],

@@ -34,7 +34,10 @@ function startKaraCos() {
 							},
 							bundles: {
 								custom: "/_browser/karacos-ui/lib/ae-bundle"
-							}, 
+							},
+//							repositories: {
+////								linklist: {data: []}
+//							},
 							plugins: {
 								load: [ 'common/format',
 								        'common/link',
@@ -42,6 +45,9 @@ function startKaraCos() {
 								        'common/highlighteditables',
 								        'common/paste',
 								        'custom/karacos-repository'
+								        ,'extra/browser'
+								        ,'extra/imagebrowser'
+								        ,'extra/linkbrowser'
 								        ],
 								format: {
 									editables: {

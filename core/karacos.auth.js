@@ -90,6 +90,7 @@ require(
 				};
 				
 				/**
+				 * Checks if user is connected to the backend
 				 * 
 				 * @returns {Boolean}
 				 */
@@ -154,14 +155,14 @@ require(
 					var auth = this;
 					auth.userConnected = true;
 					auth.user_actions_forms = useractionsforms;
-					KaraCos.$.ajax({
-						url: History.getState().url,
-						cache: false,
-						headers: {'karacos-fragment': 'true'},
-						success: function(data) {
-							KaraCos(KaraCos.config.main_content).empty().append(data);
-						}
-					});
+//					KaraCos.$.ajax({ // Too much linking / should be handled by page callback
+//						url: History.getState().url,
+//						cache: false,
+//						headers: {'karacos-fragment': 'true'},
+//						success: function(data) {
+//							KaraCos(KaraCos.config.main_content).empty().append(data);
+//						}
+//					});
 					auth.authenticationHeader();
 					
 				};
@@ -253,6 +254,7 @@ require(
 					
 				};
 				/**
+				 * Provides the karacos login window
 				 * 
 				 * @param callback
 				 * @returns

@@ -330,7 +330,7 @@ require(
 									}
 								}); // POST login form
 							});  // click
-							that.loginWindow.dialog({width: '600px', modal:true, 'title': "Connexion au site"}).show();
+							that.loginWindow.dialog({width: '80%', modal:true, 'title': "Connexion au site"}).show();
 						} // get form success
 					});			
 				};

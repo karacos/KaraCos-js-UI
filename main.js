@@ -1,17 +1,17 @@
 function loadKaraCos() {
 	require(
 			[
-			 "order!karacos/deps/history/scripts/uncompressed/amplify.store",
+			 "karacos/deps/history/scripts/uncompressed/amplify.store",
 			 
-			 "order!karacos/vendor/underscore-min",
-			 "order!karacos/vendor/backbone-min",
-			 'order!karacos/core/jquery.promise',
-			 "order!karacos/vendor/jquery.json-2.2.min",
-			 "order!karacos/vendor/vie",
-			 "order!karacos/vendor/vie-containermanager",
-			 "order!karacos/vendor/vie-collectionmanager",
+			 "karacos/vendor/underscore-min",
+			 "karacos/vendor/backbone-min",
+			 'karacos/core/jquery.promise',
+			 "karacos/vendor/jquery.json-2.2.min",
+			 "karacos/vendor/vie",
+			 "karacos/vendor/vie-containermanager",
+			 "karacos/vendor/vie-collectionmanager",
 			 //"order!karacos/vendor/vie-aloha",
-			 "order!karacos/deps/jquery-tmpl"
+			 "karacos/deps/jquery-tmpl"
 			],
 			 function() {
 				require(["karacos/core/karacos"]);

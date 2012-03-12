@@ -2,8 +2,8 @@
 	$(function(){
 		require(
 				[
-			 	"order!karacos/deps/json-template",
-		        "order!karacos/deps/modernizr-1.6.min"
+			 	"karacos/deps/json-template",
+		        "karacos/deps/modernizr-1.6.min"
 			    ],
 				function(){
 					"use strict";

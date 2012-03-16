@@ -49,20 +49,7 @@
 								}});
 							return result;
 						};
-
-						VIE.ContainerManager.findAdditionalInstanceProperties = function(element, modelInstance){
-							if (element.attr("lang") !== undefined) {
-								modelInstance.set({lang: element.attr("lang")});
-							}
-							if (element.attr("url") !== undefined) {
-								modelInstance.set({url: element.attr("url")});
-							}
-						};
-						
-
-					    
-						
-					    function karacosConstructor() {
+						function karacosConstructor() {
 							var that = {'$': window.jQuery,
 									/**
 									 *Options for jsontemplate

@@ -1,7 +1,17 @@
 define("karacos/core/karacos.ui", ["jquery"], function($){
 	var karacos;
 	$('body').createPromiseEvent('kcui');
-	$('body').bind('kcui', function() {console.log("UI initialization done")});
+	$('body').bind('kcui', function() {
+		VIE.ContainerManager.findAdditionalInstanceProperties = function(element, modelInstance){
+			if (element.attr("lang") !== undefined) {
+				modelInstance.set({lang: element.attr("lang")});
+			}
+			if (element.attr("url") !== undefined) {
+				modelInstance.set({url: element.attr("url")});
+			}
+		};
+		console.log("UI initialization done")
+		});
 	$('body').bind('kcauth', function(){
 		karacos = window.KaraCos;
 	});

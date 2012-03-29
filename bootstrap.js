@@ -92,7 +92,7 @@ function startKaraCos() {
 								} // draganddropfiles
 							} //plugins
 						};
-		  	require(["karacos/main"],function(){
+		  	require(["jquery","karacos/main"],function(){
 				console.log("loaded karacos/main");
 		  	});
 		

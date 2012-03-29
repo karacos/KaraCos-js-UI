@@ -8,8 +8,6 @@
 				function(){
 					"use strict";
 					var $ = window.kcQuery;
-					$('body').createPromiseEvent('kcready');
-					$('body').createPromiseEvent('kccore');
 					$(function(){
 						//var $ = window.$;
 						// Sync with backend
@@ -247,7 +245,7 @@
 										throw Error("KaraCos object already initialized")
 									}
 									karacos.config = param;
-									$('body').bind('kccore', function(){
+									//$('body').bind('kccore', function(){
 										that.$.extend(true,karacos,that);
 										window.KaraCos = KaraCos = karacos;
 										define('karacos',[], function(){
@@ -261,7 +259,7 @@
 											console.log("Triggering event kcready");
 										}
 										$('body').trigger('kcready',[karacos]);
-									});
+									//});
 								}
 								if (typeof param === 'string') {
 									//do special stuff ? else process as jQuery selector

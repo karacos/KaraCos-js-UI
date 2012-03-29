@@ -3,7 +3,6 @@ require(
 	function($) {
 	//var $ = window.kcQuery;
 	//$(function(){
-		$('body').createPromiseEvent('kcauth');
 		$('body').bind('kccore',function(){ //
 			//var KaraCos = karacos;
 			/**

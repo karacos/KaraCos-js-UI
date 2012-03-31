@@ -11,10 +11,6 @@ function($){
 		require(
 				["karacos/vendor/backbone-min",
 				 "karacos/vendor/jquery.json-2.2.min",
-				 "karacos/vendor/vie",
-				 "karacos/vendor/vie-containermanager",
-				 "karacos/vendor/vie-collectionmanager",
-				 //"order!karacos/vendor/vie-aloha",
 				 "karacos/deps/jquery-tmpl"
 				],
 				 function() {

@@ -10,7 +10,7 @@ define("karacos/core/karacos.ui", ["jquery"], function($){
 				modelInstance.set({url: element.attr("url")});
 			}
 		};
-		console.log("UI initialization done")
+		console.log("UI initialization done");
 		});
 	$('body').bind('kcauth', function(){
 		karacos = window.KaraCos;

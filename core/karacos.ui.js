@@ -51,35 +51,59 @@ define("karacos/core/karacos.ui", ["jquery"], function($){
 		};
 	}
 	return {
-			'init': function(config) {
-				function initToolkit(toolkit){
-					ui.toolkit = toolkit;
+		/**
+		 * UI initialization
+		 */
+		'init': function(config) {
+			/**
+			 * Callback for toolkit require
+			 * @param toolkit
+			 * @returns
+			 */
+			function initToolkit(toolkit){
+				ui.toolkit = toolkit;
+				if (typeof toolkit.init === "function") {
+					toolkit.init(function() {
+						$('body').trigger('kcui');
+					});
+				} else {
 					$('body').trigger('kcui');
 				}
-				var ui = this;
-				console.log("Initializing UI");
-				if (typeof config.toolkit === "string") {
-					require([config.toolkit], initToolkit);
-				} else {
-					require(["karacos/modules/toolkit.jQuery.ui"], initToolkit);
-				}
-				
-			},
-			'alert': function(message, buttons) {
-				var ui = this;
-				ui.toolkit.alert(message, buttons);
-			},
-			/**
-			 * params : 
-			 * 		parent : container of header. buttons will be appended
-			 * 		options :
-			 * 			logout: callback function for triggering after logout button
-			 */
-			'headerButtons': function(parent,options) {
-				ui = this;
-				if (typeof ui.toolkit.headerButtons === "function") {
-					ui.toolkit.headerButtons(parent,options);
-				}
 			}
+			var ui = this;
+			console.log("Initializing UI");
+			if (typeof config.toolkit === "string") {
+				// use of user defined toolkit
+				// such toolkit should implement other methods of this object :
+				// alert(message, buttons)
+				// headerButtons(parent,options)
+				// see below for more doc
+				require([config.toolkit], initToolkit);
+			} else {
+				// Default toolkit : jquery-ui
+				require(["karacos/modules/toolkit.jQuery.ui"], initToolkit);
+			}
+			
+		},
+		
+		/**
+		 * UI alert, showing a message and buttons
+		 */
+		'alert': function(message, buttons) {
+			var ui = this;
+			ui.toolkit.alert(message, buttons);
+		},
+		/**
+		 * params : 
+		 * 		parent : container of header. buttons will be appended
+		 * 		options :
+		 * 			logout: callback function for triggering after logout button
+		 */
+		'headerButtons': function(parent,options) {
+			ui = this;
+			if (typeof ui.toolkit.headerButtons === "function") {
+				ui.toolkit.headerButtons(parent,options);
+			}
+		}
 	}
 });

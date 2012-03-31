@@ -6,8 +6,6 @@ define("karacos/modules/toolkit.jQuery.ui",
 	"karacos/deps/history/scripts/uncompressed/history.adapter.jquery",
 	"karacos/deps/jquery-ui-1.8.14.custom",
 //	"karacos/deps/ui.menu",
-	"karacos/deps/ui.panel",
-	"karacos/deps/ui.toolbar",
 ],
 function($) {
 	var karacos,
@@ -35,6 +33,18 @@ function($) {
 	});
     
 	return {
+		/**
+		 * Initialize toolkit
+		 */
+		"init": function(callback) {
+			// we must wait for jquery-ui to be loaded...
+			require(["karacos/deps/ui.panel",
+			         "karacos/deps/ui.toolbar"], function(){
+				if (typeof callback === "function") {
+					callback();
+				}
+			});
+		},
 		"alert": function(message, buttons) {
 			var 
 			ui = this,

@@ -1,7 +1,9 @@
-define("karacos/core/karacos.ui", ["jquery"], function($){
+define("karacos/core/karacos.ui",
+		["jquery",
+		 "karacos/vendor/vie"], function($){
 	var karacos;
-	$('body').createPromiseEvent('kcui');
-	$('body').bind('kcui', function() {
+	require(["karacos/vendor/vie-containermanager",
+	         "karacos/vendor/vie-collectionmanager"], function(){
 		VIE.ContainerManager.findAdditionalInstanceProperties = function(element, modelInstance){
 			if (element.attr("lang") !== undefined) {
 				modelInstance.set({lang: element.attr("lang")});
@@ -10,8 +12,9 @@ define("karacos/core/karacos.ui", ["jquery"], function($){
 				modelInstance.set({url: element.attr("url")});
 			}
 		};
-		console.log("UI initialization done");
-		});
+		
+	});
+	$('body').createPromiseEvent('kcui');
 	$('body').bind('kcauth', function(){
 		karacos = window.KaraCos;
 	});
@@ -60,17 +63,20 @@ define("karacos/core/karacos.ui", ["jquery"], function($){
 			 * @param toolkit
 			 * @returns
 			 */
-			function initToolkit(toolkit){
-				ui.toolkit = toolkit;
-				if (typeof toolkit.init === "function") {
-					toolkit.init(function() {
+			var 
+				initToolkit = function(toolkit){
+					ui.toolkit = toolkit;
+					if (typeof toolkit.init === "function") {
+						toolkit.init(function() {
+							$('body').trigger('kcui');
+							
+						});
+					} else {
 						$('body').trigger('kcui');
-					});
-				} else {
-					$('body').trigger('kcui');
-				}
-			}
-			var ui = this;
+					}
+					console.log("UI initialization done");
+				},
+				ui = this;
 			console.log("Initializing UI");
 			if (typeof config.toolkit === "string") {
 				// use of user defined toolkit

@@ -1,9 +1,6 @@
 define("karacos/modules/toolkit.jQuery.ui",
 [
 	"jquery",
-	"karacos/vendor/vie",
-	"karacos/vendor/vie-containermanager",
-	"karacos/vendor/vie-collectionmanager",
 	"karacos/deps/history/scripts/uncompressed/history",
 	"karacos/deps/history/scripts/uncompressed/history.html4",
 	"karacos/deps/history/scripts/uncompressed/history.adapter.jquery",

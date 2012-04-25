@@ -96,7 +96,7 @@ require(
 				this.isUserConnected = function(){
 					var that = this;
 					if (this.userConnected === undefined) {
-						if (this.user_actions_forms.user.search('anonymous') >= 0) {
+						if (this.getUserActions().user.search('anonymous') >= 0) {
 							// user not connected in karacos
 							if (typeof FB !== 'undefined') {
 								FB.getLoginStatus(function(response) {
